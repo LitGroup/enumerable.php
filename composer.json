@@ -1,0 +1,34 @@
+{
+    "name": "litgroup/enumerable",
+    "description": "Implementation of the enumerable type for PHP.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Roman Shamritskiy",
+            "email": "roman@litgroup.ru"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "LitGroup\\Enumerable\\": "src"
+        }
+    },
+    "archive": {
+        "exclude": [
+            "/tests",
+            "phpunit.xml.dist",
+            "/.travis.yml",
+            ".gitignore"
+        ]
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
+    },
+    "require": {},
+    "require-dev": {
+        "phpunit/phpunit": "^4.8"
+    }
+}

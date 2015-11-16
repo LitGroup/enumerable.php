@@ -1,0 +1,7 @@
+### Composer
+composer.phar
+composer.lock
+vendor/
+
+### phpDocumentor
+/docs/api/*
