@@ -18,6 +18,7 @@
         "exclude": [
             "/tests",
             "/phpunit.xml.dist",
+            "/phpdoc.dist.xml",
             "/.travis.yml",
             ".gitignore"
         ]
