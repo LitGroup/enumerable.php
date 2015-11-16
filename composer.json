@@ -17,7 +17,7 @@
     "archive": {
         "exclude": [
             "/tests",
-            "phpunit.xml.dist",
+            "/phpunit.xml.dist",
             "/.travis.yml",
             ".gitignore"
         ]
