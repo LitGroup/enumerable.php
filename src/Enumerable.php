@@ -24,14 +24,14 @@ use OutOfBoundsException;
 abstract class Enumerable
 {
     /**
-     * Cache of all available values of Enum.
+     * Cache of all available values of enumerables.
      *
      * @var array
      */
-    private static $values = [];
+    private static $enums = [];
 
     /**
-     * Current index of the instance of Enumerable.
+     * Current index of the instance of the enumerable.
      *
      * @var mixed
      */
@@ -49,7 +49,7 @@ abstract class Enumerable
      */
     final public static function getValue($index)
     {
-        if (!array_key_exists($index, static::getValues())) {
+        if (!array_key_exists($index, self::getValues())) {
             throw new OutOfBoundsException(
                 sprintf('Enum "%s" has no value indexed by "%s".', get_called_class(), $index)
             );
@@ -65,13 +65,11 @@ abstract class Enumerable
      */
     final public static function getValues()
     {
-        $enumClass = get_called_class();
-
-        if (!array_key_exists($enumClass, self::$values)) {
-            self::$values[$enumClass] = self::initializeValuesForClass($enumClass);
+        if (!array_key_exists(static::class, self::$enums)) {
+            self::$enums[static::class] = self::initializeValuesForClass(static::class);
         }
 
-        return self::$values[$enumClass];
+        return self::$enums[static::class];
     }
 
     /**
@@ -85,14 +83,22 @@ abstract class Enumerable
     }
 
     /**
-     * Protected constructor for using internally in child classes.
-     *
      * @param mixed $index
      */
-    final protected function __construct($index)
+    final protected static function createEnum($index)
     {
-        $this->index = $index;
+        if (!array_key_exists(static::class, self::$enums) || !array_key_exists($index, self::$enums[static::class])) {
+            $enum = new static();
+            $enum->index = $index;
+            self::$enums[static::class][$index] = $enum;
+        }
+
+        return self::$enums[static::class][$index];
     }
+
+    /*
+     * Internal methods.
+     */
 
     /**
      * Initializes values of enumerable class.
@@ -107,9 +113,20 @@ abstract class Enumerable
     {
         $classReflection = new \ReflectionClass($enumClass);
 
+        // Enumerable must be final.
         if (!$classReflection->isFinal()) {
             throw new LogicException(
-                sprintf('Enumerable class should be final, but "%s" is not final.', $enumClass)
+                sprintf('Enumerable class must be final, but "%s" is not final.', $enumClass)
+            );
+        }
+
+        // Enumerable cannot be Serializable.
+        if (is_subclass_of($enumClass, \Serializable::class)) {
+            throw new LogicException(
+                sprintf(
+                    'Enumerable cannot be serializable, but enum class "%s" implements "Serializable" interface.',
+                    $enumClass
+                )
             );
         }
 
@@ -138,6 +155,22 @@ abstract class Enumerable
      */
     private static function isServiceMethod(ReflectionMethod $method)
     {
-        return !$method->isPublic() || in_array($method->getShortName(), ['getValue', 'getValues']);
+        return !$method->isPublic() || in_array($method->getShortName(), self::getServiceMethods());
     }
+
+    /**
+     * @return string[]
+     */
+    private static function getServiceMethods()
+    {
+        return [
+            'getValue',
+            'getValues',
+        ];
+    }
+
+    final protected function __construct() {}
+    final private function __clone() {}
+    final private function __sleep() {}
+    final private function __wakeup() {}
 }

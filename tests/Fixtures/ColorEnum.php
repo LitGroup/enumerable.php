@@ -23,20 +23,22 @@ final class ColorEnum extends Enumerable
      */
     public static function red()
     {
-        return new self(self::RED);
+        return self::createEnum(self::RED);
     }
+
     /**
      * @return self
      */
     public static function green()
     {
-        return new self(self::GREEN);
+        return self::createEnum(self::GREEN);
     }
+
     /**
      * @return self
      */
     public static function blue()
     {
-        return new self(self::BLUE);
+        return self::createEnum(self::BLUE);
     }
 }
