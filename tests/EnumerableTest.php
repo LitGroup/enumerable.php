@@ -8,11 +8,11 @@
  * file that was distributed with this source code.
  */
 
-namespace LitGroup\Enumerable\Tests;
+namespace Tests\LitGroup\Enumerable;
 
 use LitGroup\Enumerable\Enumerable;
-use LitGroup\Enumerable\Tests\Fixtures\ColorEnum;
-use LitGroup\Enumerable\Tests\Fixtures\ColorStrEnum;
+use Tests\LitGroup\Enumerable\Fixtures\ColorEnum;
+use Tests\LitGroup\Enumerable\Fixtures\ColorStrEnum;
 
 class EnumerableTest extends \PHPUnit_Framework_TestCase
 {
@@ -28,7 +28,7 @@ class EnumerableTest extends \PHPUnit_Framework_TestCase
         $values = ColorEnum::getValues();
         $this->assertCount(3, $values);
         for ($i = 0; $i < 3; $i++) {
-            $this->assertInstanceOf('LitGroup\Enumerable\Tests\Fixtures\ColorEnum', $values[$i]);
+            $this->assertInstanceOf(ColorEnum::class, $values[$i]);
             $this->assertSame($i, $values[$i]->getIndex());
         }
     }

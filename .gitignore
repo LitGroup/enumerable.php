@@ -5,3 +5,6 @@ vendor/
 
 ### phpDocumentor
 /docs/api/*
+
+### Build
+/build/*

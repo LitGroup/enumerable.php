@@ -14,6 +14,11 @@
             "LitGroup\\Enumerable\\": "src"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\LitGroup\\Enumerable\\": "tests"
+        }
+    },
     "archive": {
         "exclude": [
             "/tests",
@@ -28,7 +33,9 @@
             "dev-master": "1.0.x-dev"
         }
     },
-    "require": {},
+    "require": {
+        "php": "~5.5|~7.0"
+    },
     "require-dev": {
         "phpunit/phpunit": "^4.8"
     }

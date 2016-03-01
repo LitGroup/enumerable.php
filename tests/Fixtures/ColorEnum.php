@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace LitGroup\Enumerable\Tests\Fixtures;
+namespace Tests\LitGroup\Enumerable\Fixtures;
 
 use LitGroup\Enumerable\Enumerable;
 
