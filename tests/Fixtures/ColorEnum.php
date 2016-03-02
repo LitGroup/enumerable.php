@@ -14,9 +14,9 @@ use LitGroup\Enumerable\Enumerable;
 
 final class ColorEnum extends Enumerable
 {
-    const RED = 0;
-    const GREEN = 1;
-    const BLUE = 2;
+    const RED = 'RED';
+    const GREEN = 'GREEN';
+    const BLUE = 'BLUE';
 
     /**
      * @return self

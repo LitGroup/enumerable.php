@@ -12,11 +12,11 @@ namespace Tests\LitGroup\Enumerable\Fixtures;
 
 use LitGroup\Enumerable\Enumerable;
 
-final class ColorStrEnum extends Enumerable
+final class SerializableEnum extends Enumerable implements \Serializable
 {
-    const RED = 'red';
-    const GREEN = 'green';
-    const BLUE = 'blue';
+    const RED = 'RED';
+    const GREEN = 'GREEN';
+    const BLUE = 'BLUE';
 
     /**
      * @return self
@@ -25,6 +25,7 @@ final class ColorStrEnum extends Enumerable
     {
         return self::createEnum(self::RED);
     }
+
     /**
      * @return self
      */
@@ -32,11 +33,22 @@ final class ColorStrEnum extends Enumerable
     {
         return self::createEnum(self::GREEN);
     }
+
     /**
      * @return self
      */
     public static function blue()
     {
         return self::createEnum(self::BLUE);
+    }
+
+    public function serialize()
+    {
+        // Nothing to do.
+    }
+
+    public function unserialize($serialized)
+    {
+        // Nothing to do.
     }
 }

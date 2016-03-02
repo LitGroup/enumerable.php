@@ -10,23 +10,12 @@
 
 namespace Tests\LitGroup\Enumerable;
 
-use LitGroup\Enumerable\Enumerable;
 use Tests\LitGroup\Enumerable\Fixtures\ColorEnum;
-use Tests\LitGroup\Enumerable\Fixtures\ColorEnumSerializable;
-use Tests\LitGroup\Enumerable\Fixtures\ColorStrEnum;
+use Tests\LitGroup\Enumerable\Fixtures\SerializableEnum;
+use Tests\LitGroup\Enumerable\Fixtures\NonFinalEnum;
 
 class EnumerableTest extends \PHPUnit_Framework_TestCase
 {
-    public function testGetValues()
-    {
-        $values = ColorEnum::getValues();
-        $this->assertCount(3, $values);
-        for ($i = 0; $i < 3; $i++) {
-            $this->assertInstanceOf(ColorEnum::class, $values[$i]);
-            $this->assertSame($i, $values[$i]->getIndex());
-        }
-    }
-
     public function testIndex()
     {
         $this->assertSame(ColorEnum::RED, ColorEnum::red()->getIndex());
@@ -34,74 +23,60 @@ class EnumerableTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(ColorEnum::BLUE, ColorEnum::blue()->getIndex());
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Enumerable class must be final, but "LitGroup\Enumerable\Enumerable" is not final.
-     */
-    public function testValuesForNonFinalEnum()
+    public function testEquality()
     {
-        Enumerable::getValues();
-    }
+        $a = ColorEnum::red();
+        $b = ColorEnum::red();
+        $c = ColorEnum::green();
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Enumerable cannot be serializable, but enum class "Tests\LitGroup\Enumerable\Fixtures\ColorEnumSerializable" implements "Serializable" interface.
-     */
-    public function testEnumCannotBeSerializable()
-    {
-        ColorEnumSerializable::getValues();
-    }
-
-    public function provideGetValueTests()
-    {
-        return [
-            [ColorEnum::RED, ColorEnum::red()],
-            [ColorEnum::GREEN, ColorEnum::green()],
-            [ColorEnum::BLUE, ColorEnum::blue()],
-        ];
-    }
-
-    /**
-     * @dataProvider provideGetValueTests
-     */
-    public function testGetValue($index, ColorEnum $expected)
-    {
-        $this->assertEquals($expected, ColorEnum::getValue($index));
-    }
-
-    /**
-     * @expectedException \OutOfBoundsException
-     */
-    public function testGetValue_OutOfBoundsException()
-    {
-        ColorEnum::getValue(100);
-    }
-
-    public function testEquivalency()
-    {
-        $this->assertEquals(ColorEnum::blue(), ColorEnum::blue());
-        $this->assertNotEquals(ColorEnum::blue(), ColorEnum::red());
+        $this->assertEquals($a, $b);
+        $this->assertNotEquals($a, $c);
     }
 
     public function testIdentity()
     {
-        $this->assertSame(ColorEnum::blue(), ColorEnum::blue());
-        $this->assertNotSame(ColorEnum::blue(), ColorEnum::red());
+        $a = ColorEnum::red();
+        $b = ColorEnum::red();
+        $c = ColorEnum::green();
+
+        $this->assertSame($a, $b);
+        $this->assertNotSame($a, $c);
     }
 
-    public function testEnumerableForTextIndexes()
+    public function testGetValue()
     {
-        $red = ColorStrEnum::red();
-        $green = ColorStrEnum::green();
-        $blue = ColorStrEnum::blue();
+        $this->assertSame(ColorEnum::red(), ColorEnum::getValue(ColorEnum::RED));
+        $this->assertSame(ColorEnum::green(), ColorEnum::getValue(ColorEnum::GREEN));
+        $this->assertSame(ColorEnum::blue(), ColorEnum::getValue(ColorEnum::BLUE));
+    }
 
-        $this->assertEquals(ColorStrEnum::red(), $red);
-        $this->assertEquals(ColorStrEnum::RED, $red->getIndex());
+    public function testGetValues()
+    {
+        $this->assertSame(
+            [
+                ColorEnum::RED => ColorEnum::red(),
+                ColorEnum::GREEN => ColorEnum::green(),
+                ColorEnum::BLUE => ColorEnum::blue(),
+            ],
+            ColorEnum::getValues()
+        );
+    }
 
-        $this->assertEquals(ColorStrEnum::green(), $green);
-        $this->assertEquals(ColorStrEnum::GREEN, $green->getIndex());
+    /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessage Enumerable class must be final, but "Tests\LitGroup\Enumerable\Fixtures\NonFinalEnum" is not final.
+     */
+    public function testValuesForNonFinalEnum()
+    {
+        NonFinalEnum::getValues();
+    }
 
-        $this->assertEquals(ColorStrEnum::blue(), $blue);
-        $this->assertEquals(ColorStrEnum::BLUE, $blue->getIndex());
+    /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessage Enumerable cannot be serializable, but enum class "Tests\LitGroup\Enumerable\Fixtures\SerializableEnum" implements "Serializable" interface.
+     */
+    public function testEnumCannotBeSerializable()
+    {
+        SerializableEnum::getValues();
     }
 }
