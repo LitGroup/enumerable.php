@@ -49,13 +49,14 @@ abstract class Enumerable
      */
     final public static function getValue($index)
     {
-        if (!array_key_exists($index, self::getValues())) {
+        $values = static::getValues();
+        if (!array_key_exists($index, $values)) {
             throw new OutOfBoundsException(
                 sprintf('Enum "%s" has no value indexed by "%s".', get_called_class(), $index)
             );
         }
 
-        return static::getValues()[$index];
+        return $values[$index];
     }
 
     /**
@@ -65,8 +66,8 @@ abstract class Enumerable
      */
     final public static function getValues()
     {
-        if (!array_key_exists(static::class, self::$enums)) {
-            self::$enums[static::class] = self::initializeValuesForClass(static::class);
+        if (self::isEnumNotInitialized(static::class)) {
+            self::initializeEnum(static::class);
         }
 
         return self::$enums[static::class];
@@ -98,18 +99,16 @@ abstract class Enumerable
 
     /*
      * Internal methods.
-     */
+     * ********************************************************************* */
 
     /**
      * Initializes values of enumerable class.
      *
      * @param string $enumClass
      *
-     * @return Enumerable[]
-     *
      * @throws LogicException
      */
-    private static function initializeValuesForClass($enumClass)
+    private static function initializeEnum($enumClass)
     {
         $classReflection = new \ReflectionClass($enumClass);
 
@@ -132,7 +131,7 @@ abstract class Enumerable
 
         $methods = $classReflection->getMethods(ReflectionMethod::IS_STATIC);
 
-        $values = [];
+        self::$enums[$enumClass] = [];
         foreach ($methods as $method) {
             if (self::isServiceMethod($method)) {
                 continue;
@@ -140,10 +139,18 @@ abstract class Enumerable
 
             /** @var Enumerable $value */
             $value = $method->invoke(null);
-            $values[$value->getIndex()] = $value;
+            self::$enums[$enumClass][$value->getIndex()] = $value;
         }
+    }
 
-        return $values;
+    /**
+     * @param string $enumClass
+     *
+     * @return bool
+     */
+    private static function isEnumNotInitialized($enumClass)
+    {
+        return !array_key_exists($enumClass, self::$enums);
     }
 
     /**
