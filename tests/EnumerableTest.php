@@ -50,6 +50,14 @@ class EnumerableTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(ColorEnum::blue(), ColorEnum::getValue(ColorEnum::BLUE));
     }
 
+    /**
+     * @expectedException \OutOfBoundsException
+     */
+    public function testGetValueForNonExistentIndex()
+    {
+        ColorEnum::getValue('incorrect_index');
+    }
+
     public function testGetValues()
     {
         $this->assertSame(
