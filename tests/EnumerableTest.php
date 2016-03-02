@@ -71,7 +71,7 @@ class EnumerableTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \LogicException
+     * @expectedException \DomainException
      * @expectedExceptionMessage Enumerable class must be final, but "Tests\LitGroup\Enumerable\Fixtures\NonFinalEnum" is not final.
      */
     public function testValuesForNonFinalEnum()
@@ -80,7 +80,7 @@ class EnumerableTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \LogicException
+     * @expectedException \DomainException
      * @expectedExceptionMessage Enumerable cannot be serializable, but enum class "Tests\LitGroup\Enumerable\Fixtures\SerializableEnum" implements "Serializable" interface.
      */
     public function testEnumCannotBeSerializable()

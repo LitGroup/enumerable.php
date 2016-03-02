@@ -13,7 +13,7 @@ namespace LitGroup\Enumerable;
 
 use ReflectionClass;
 use ReflectionMethod;
-use LogicException;
+use DomainException;
 use OutOfBoundsException;
 
 /**
@@ -29,6 +29,13 @@ abstract class Enumerable
      * @var array
      */
     private static $enums = [];
+
+    /**
+     * Marks when initialization in progress.
+     *
+     * @var bool
+     */
+    private static $initializationState = false;
 
     /**
      * Current index of the instance of the enumerable.
@@ -85,16 +92,19 @@ abstract class Enumerable
 
     /**
      * @param mixed $index
+     *
+     * @return static
      */
     final protected static function createEnum($index)
     {
-        if (!array_key_exists(static::class, self::$enums) || !array_key_exists($index, self::$enums[static::class])) {
+        if (self::$initializationState) {
             $enum = new static();
             $enum->index = $index;
-            self::$enums[static::class][$index] = $enum;
+
+            return $enum;
         }
 
-        return self::$enums[static::class][$index];
+        return static::getValue($index);
     }
 
     /*
@@ -106,40 +116,45 @@ abstract class Enumerable
      *
      * @param string $enumClass
      *
-     * @throws LogicException
+     * @throws DomainException
      */
     private static function initializeEnum($enumClass)
     {
-        $classReflection = new \ReflectionClass($enumClass);
+        self::$initializationState = true;
+        try {
+            $classReflection = new \ReflectionClass($enumClass);
 
-        // Enumerable must be final.
-        if (!$classReflection->isFinal()) {
-            throw new LogicException(
-                sprintf('Enumerable class must be final, but "%s" is not final.', $enumClass)
-            );
-        }
-
-        // Enumerable cannot be Serializable.
-        if (is_subclass_of($enumClass, \Serializable::class)) {
-            throw new LogicException(
-                sprintf(
-                    'Enumerable cannot be serializable, but enum class "%s" implements "Serializable" interface.',
-                    $enumClass
-                )
-            );
-        }
-
-        $methods = $classReflection->getMethods(ReflectionMethod::IS_STATIC);
-
-        self::$enums[$enumClass] = [];
-        foreach ($methods as $method) {
-            if (self::isServiceMethod($method)) {
-                continue;
+            // Enumerable must be final.
+            if (!$classReflection->isFinal()) {
+                throw new DomainException(
+                    sprintf('Enumerable class must be final, but "%s" is not final.', $enumClass)
+                );
             }
 
-            /** @var Enumerable $value */
-            $value = $method->invoke(null);
-            self::$enums[$enumClass][$value->getIndex()] = $value;
+            // Enumerable cannot be Serializable.
+            if (is_subclass_of($enumClass, \Serializable::class)) {
+                throw new DomainException(
+                    sprintf(
+                        'Enumerable cannot be serializable, but enum class "%s" implements "Serializable" interface.',
+                        $enumClass
+                    )
+                );
+            }
+
+            $methods = $classReflection->getMethods(ReflectionMethod::IS_STATIC);
+
+            self::$enums[$enumClass] = [];
+            foreach ($methods as $method) {
+                if (self::isServiceMethod($method)) {
+                    continue;
+                }
+
+                /** @var Enumerable $value */
+                $value = $method->invoke(null);
+                self::$enums[$enumClass][$value->getIndex()] = $value;
+            }
+        } finally {
+            self::$initializationState = false;
         }
     }
 
@@ -177,6 +192,7 @@ abstract class Enumerable
     }
 
     final protected function __construct() {}
+
     final private function __clone() {}
     final private function __sleep() {}
     final private function __wakeup() {}
