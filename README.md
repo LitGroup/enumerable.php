@@ -1,10 +1,12 @@
 Enumerable
 ==========
 
+Library provides support of enumerable classes for PHP.
+
 [![Version](https://img.shields.io/packagist/v/litgroup/enumerable.svg)](https://packagist.org/packages/litgroup/enumerable)
 [![Dev Version](https://img.shields.io/packagist/vpre/litgroup/enumerable.svg)](https://packagist.org/packages/litgroup/enumerable)
 [![Downloads](https://img.shields.io/packagist/dt/litgroup/enumerable.svg)](https://packagist.org/packages/litgroup/enumerable)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/LitGroup/enumerable.php/blob/master/LICENSE)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)][license]
 [![Build Status](https://travis-ci.org/LitGroup/enumerable.php.svg?branch=master)](https://travis-ci.org/LitGroup/enumerable.php)
 
 Example of usage.
@@ -192,3 +194,18 @@ If you need to get all values of enumerable type, use static method
 ```php
 ColorEnum::getValues(); // => Returns array of ColorEnum with enum index as key
 ```
+
+Run tests
+---------
+
+```bash
+composer install
+./tests.sh
+```
+
+LICENSE
+-------
+
+See [LICENSE][license] file.
+
+[license]: https://raw.githubusercontent.com/LitGroup/enumerable.php/master/LICENSE
