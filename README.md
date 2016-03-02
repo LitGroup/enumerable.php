@@ -170,7 +170,7 @@ class AlertView
 
 `Enumerable` works as runtime-constant. Enumerable type cannot be serialized.
 If you need to store representation of enumerable in a database or send
-it via an API yor can use index of enumerable as representation.
+it via an API you can use index of enumerable as representation.
 
 ```php
 $enum->getIndex();
