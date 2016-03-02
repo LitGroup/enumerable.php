@@ -9,6 +9,16 @@ Library provides support of enumerable classes for PHP.
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)][license]
 [![Build Status](https://travis-ci.org/LitGroup/enumerable.php.svg?branch=master)](https://travis-ci.org/LitGroup/enumerable.php)
 
+Installation
+------------
+
+Installation via composer:
+
+```
+composer require litgroup/enumerable=0.2.*
+```
+
+
 Example of usage.
 -----------------
 
