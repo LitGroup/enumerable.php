@@ -37,7 +37,7 @@ For example let's create a `ColorEnum`:
    Constants can be used in `switch-case` statements later.
     
 
-**Complete Example**
+**Enum definition example**
 
 ```php
 
