@@ -106,4 +106,14 @@ class EnumerableTest extends \PHPUnit_Framework_TestCase
     {
         DuplicateIndexEnum::some();
     }
+
+    public function testSwitchStatement()
+    {
+        switch (ColorEnum::green()) {
+            case ColorEnum::green():
+                break;
+            default:
+                $this->fail('GREEN case had to be called.');
+        }
+    }
 }
