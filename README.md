@@ -11,7 +11,7 @@
 Installation via composer:
 
 ```bash
-composer require litgroup/enumerable=0.2.*
+composer require litgroup/enumerable=0.3.*
 ```
 
 
