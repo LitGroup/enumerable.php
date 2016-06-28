@@ -163,6 +163,7 @@ final class PaymentStatus extends Enumerable {
         return $this === self::approved() || $this === self::declined();
     }
 }
+```
 
 Run tests
 ---------
