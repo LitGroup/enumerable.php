@@ -23,8 +23,6 @@ Example of usage.
 -----------------
 
 ###  Define enumerable
-For example let's create a `ColorEnum`:
-    
 1. Create `final` class, which extends `Enumerable`
 2. For each variant of values create a static method, which
    will creates an instance of value. For this purpose your method
