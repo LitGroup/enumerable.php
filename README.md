@@ -24,7 +24,7 @@ composer require litgroup/enumerable=0.2.*
 
 > **Note:** Enumerable class must be `final`!
 
-> **Note:** Use scalar types for indexes.
+> **Note:** Index can be of type `string` or `int`.
 
 **Enum definition example:**
 
