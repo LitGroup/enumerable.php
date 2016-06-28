@@ -137,14 +137,14 @@ abstract class Enumerable
         try {
             $classReflection = new \ReflectionClass($enumClass);
 
-            // Enumerable must be final.
+            // Enumerable must be final:
             if (!$classReflection->isFinal()) {
                 throw new \LogicException(
                     sprintf('Enumerable class must be final, but "%s" is not final.', $enumClass)
                 );
             }
 
-            // Enumerable cannot be Serializable.
+            // Enumerable cannot be Serializable:
             if (is_subclass_of($enumClass, \Serializable::class)) {
                 throw new \LogicException(
                     sprintf(
@@ -164,6 +164,13 @@ abstract class Enumerable
 
                 /** @var Enumerable $value */
                 $value = $method->invoke(null);
+
+                // Detect duplication of indexes:
+                if (array_key_exists($value->getIndex(), self::$enums[$enumClass])) {
+                    throw new \LogicException(
+                        sprintf('Duplicate of index "%s" in enumerable "%s".', $value->getIndex(), $enumClass)
+                    );
+                }
                 self::$enums[$enumClass][$value->getIndex()] = $value;
             }
         } finally {

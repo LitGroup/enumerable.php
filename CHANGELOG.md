@@ -5,6 +5,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Added
 - `Enumerable::getValueOf()` which returns value by index. (Replaces deprecated `getValue()`).
+- Checking of duplication of indexes.
 
 ### Changed
 - `Enumerable` now throws `\LogicException` instead of `\DomainException`

@@ -11,6 +11,7 @@
 namespace Tests\LitGroup\Enumerable;
 
 use Tests\LitGroup\Enumerable\Fixtures\ColorEnum;
+use Tests\LitGroup\Enumerable\Fixtures\DuplicateIndexEnum;
 use Tests\LitGroup\Enumerable\Fixtures\SerializableEnum;
 use Tests\LitGroup\Enumerable\Fixtures\NonFinalEnum;
 
@@ -96,5 +97,13 @@ class EnumerableTest extends \PHPUnit_Framework_TestCase
     public function testEnumCannotBeSerializable()
     {
         SerializableEnum::getValues();
+    }
+
+    /**
+     * @expectedException \LogicException
+     */
+    public function testInitializationExceptionOnDuplicateIndex()
+    {
+        DuplicateIndexEnum::some();
     }
 }
