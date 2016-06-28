@@ -5,7 +5,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Changed
 - `Enumerable` now throws `\LogicException` instead of `\DomainException`
-  when initialization failure.
+  on initialization failure.
 
 ## [0.2.0] - 2016-03-02
 ### Changed
