@@ -13,7 +13,7 @@ namespace LitGroup\Enumerable;
 
 use ReflectionClass;
 use ReflectionMethod;
-use DomainException;
+use LogicException;
 use OutOfBoundsException;
 
 /**
@@ -35,12 +35,12 @@ abstract class Enumerable
      *
      * @var bool
      */
-    private static $initializationState = false;
+    private static $isInInitializationState = false;
 
     /**
      * Current index of the instance of the enumerable.
      *
-     * @var mixed
+     * @var int|string
      */
     private $index;
 
@@ -48,7 +48,7 @@ abstract class Enumerable
     /**
      * @deprecated 0.4.0 Use getValueOf() instead.
      *
-     * @param mixed $index
+     * @param int|string $index
      *
      * @return static
      */
@@ -65,7 +65,7 @@ abstract class Enumerable
     /**
      * Returns an instance of Enumerable by index.
      *
-     * @param mixed $index
+     * @param int|string $index
      *
      * @return static
      */
@@ -106,20 +106,13 @@ abstract class Enumerable
     }
 
     /**
-     * @param mixed $index
+     * @param int|string $index
      *
      * @return static
      */
     final protected static function createEnum($index)
     {
-        if (self::$initializationState) {
-            $enum = new static();
-            $enum->index = $index;
-
-            return $enum;
-        }
-
-        return static::getValueOf($index);
+        return self::$isInInitializationState ? new static($index) : static::getValueOf($index);
     }
 
     /*
@@ -133,20 +126,20 @@ abstract class Enumerable
      */
     private static function initializeEnum($enumClass)
     {
-        self::$initializationState = true;
+        self::$isInInitializationState = true;
         try {
             $classReflection = new \ReflectionClass($enumClass);
 
             // Enumerable must be final:
             if (!$classReflection->isFinal()) {
-                throw new \LogicException(
+                throw new LogicException(
                     sprintf('Enumerable class must be final, but "%s" is not final.', $enumClass)
                 );
             }
 
             // Enumerable cannot be Serializable:
             if (is_subclass_of($enumClass, \Serializable::class)) {
-                throw new \LogicException(
+                throw new LogicException(
                     sprintf(
                         'Enumerable cannot be serializable, but enum class "%s" implements "Serializable" interface.',
                         $enumClass
@@ -167,14 +160,14 @@ abstract class Enumerable
 
                 // Detect duplication of indexes:
                 if (array_key_exists($value->getIndex(), self::$enums[$enumClass])) {
-                    throw new \LogicException(
+                    throw new LogicException(
                         sprintf('Duplicate of index "%s" in enumerable "%s".', $value->getIndex(), $enumClass)
                     );
                 }
                 self::$enums[$enumClass][$value->getIndex()] = $value;
             }
         } finally {
-            self::$initializationState = false;
+            self::$isInInitializationState = false;
         }
     }
 
@@ -212,7 +205,29 @@ abstract class Enumerable
         ];
     }
 
-    final protected function __construct() {}
+    /**
+     * @param mixed $index
+     *
+     * @return bool
+     */
+    private static function isIndexTypeAllowed($index)
+    {
+        return is_int($index) || is_string($index);
+    }
+
+    final private function __construct($index)
+    {
+        if (!self::isIndexTypeAllowed($index)) {
+            throw new \InvalidArgumentException(
+                sprintf(
+                    'Index of enumerable can be a "string" or an "int", but "%s" given.',
+                    is_object($index) ? get_class($index) : gettype($index)
+                )
+            );
+        }
+
+        $this->index = $index;
+    }
 
     final private function __clone() {}
     final private function __sleep() {}

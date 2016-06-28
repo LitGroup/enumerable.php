@@ -12,6 +12,7 @@ namespace Tests\LitGroup\Enumerable;
 
 use Tests\LitGroup\Enumerable\Fixtures\ColorEnum;
 use Tests\LitGroup\Enumerable\Fixtures\DuplicateIndexEnum;
+use Tests\LitGroup\Enumerable\Fixtures\FloatIndexedEnum;
 use Tests\LitGroup\Enumerable\Fixtures\SerializableEnum;
 use Tests\LitGroup\Enumerable\Fixtures\NonFinalEnum;
 
@@ -115,5 +116,13 @@ class EnumerableTest extends \PHPUnit_Framework_TestCase
             default:
                 $this->fail('GREEN case had to be called.');
         }
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testOnlyStringOrIntCanBeUsedForIndex()
+    {
+        FloatIndexedEnum::one();
     }
 }
