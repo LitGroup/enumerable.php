@@ -46,13 +46,30 @@ abstract class Enumerable
 
 
     /**
-     * Returns an instance of Enumerable by index.
+     * @deprecated 0.4.0 Use getValueOf() instead.
      *
      * @param mixed $index
      *
      * @return static
      */
     final public static function getValue($index)
+    {
+        trigger_error(
+            sprintf('Method %s::getValue() is deprecated. Use getValueOf() instead.', get_called_class()),
+            \E_USER_DEPRECATED
+        );
+
+        return self::getValueOf($index);
+    }
+
+    /**
+     * Returns an instance of Enumerable by index.
+     *
+     * @param mixed $index
+     *
+     * @return static
+     */
+    final public static function getValueOf($index)
     {
         $values = static::getValues();
         if (!array_key_exists($index, $values)) {
@@ -102,7 +119,7 @@ abstract class Enumerable
             return $enum;
         }
 
-        return static::getValue($index);
+        return static::getValueOf($index);
     }
 
     /*
@@ -182,7 +199,8 @@ abstract class Enumerable
     private static function getServiceMethods()
     {
         return [
-            'getValue',
+            'getValue',   // TODO: Remove, when method getValue() will be removed.
+            'getValueOf',
             'getValues',
         ];
     }

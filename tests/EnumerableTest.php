@@ -45,9 +45,19 @@ class EnumerableTest extends \PHPUnit_Framework_TestCase
 
     public function testGetValue()
     {
-        $this->assertSame(ColorEnum::red(), ColorEnum::getValue(ColorEnum::RED));
-        $this->assertSame(ColorEnum::green(), ColorEnum::getValue(ColorEnum::GREEN));
-        $this->assertSame(ColorEnum::blue(), ColorEnum::getValue(ColorEnum::BLUE));
+        $this->setExpectedException(
+            \PHPUnit_Framework_Error_Deprecated::class,
+            'Method Tests\LitGroup\Enumerable\Fixtures\ColorEnum::getValue() is deprecated. Use getValueOf() instead.'
+        );
+
+        ColorEnum::getValue(ColorEnum::RED);
+    }
+
+    public function testGetValueOf()
+    {
+        $this->assertSame(ColorEnum::red(), ColorEnum::getValueOf(ColorEnum::RED));
+        $this->assertSame(ColorEnum::green(), ColorEnum::getValueOf(ColorEnum::GREEN));
+        $this->assertSame(ColorEnum::blue(), ColorEnum::getValueOf(ColorEnum::BLUE));
     }
 
     /**
@@ -55,7 +65,7 @@ class EnumerableTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetValueForNonExistentIndex()
     {
-        ColorEnum::getValue('incorrect_index');
+        ColorEnum::getValueOf('incorrect_index');
     }
 
     public function testGetValues()
