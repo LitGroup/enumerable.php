@@ -51,8 +51,6 @@ abstract class Enumerable
      * @param mixed $index
      *
      * @return static
-     *
-     * @throws OutOfBoundsException
      */
     final public static function getValue($index)
     {
@@ -115,8 +113,6 @@ abstract class Enumerable
      * Initializes values of enumerable class.
      *
      * @param string $enumClass
-     *
-     * @throws DomainException
      */
     private static function initializeEnum($enumClass)
     {
@@ -126,14 +122,14 @@ abstract class Enumerable
 
             // Enumerable must be final.
             if (!$classReflection->isFinal()) {
-                throw new DomainException(
+                throw new \LogicException(
                     sprintf('Enumerable class must be final, but "%s" is not final.', $enumClass)
                 );
             }
 
             // Enumerable cannot be Serializable.
             if (is_subclass_of($enumClass, \Serializable::class)) {
-                throw new DomainException(
+                throw new \LogicException(
                     sprintf(
                         'Enumerable cannot be serializable, but enum class "%s" implements "Serializable" interface.',
                         $enumClass
