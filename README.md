@@ -1,7 +1,5 @@
-Enumerable
-==========
-
-Library provides support of enumerable classes for PHP.
+# Enumerable
+> Library provides support of enumerable classes for PHP.
 
 [![Version](https://img.shields.io/packagist/v/litgroup/enumerable.svg)](https://packagist.org/packages/litgroup/enumerable)
 [![Dev Version](https://img.shields.io/packagist/vpre/litgroup/enumerable.svg)](https://packagist.org/packages/litgroup/enumerable)
@@ -9,9 +7,7 @@ Library provides support of enumerable classes for PHP.
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)][license]
 [![Build Status](https://travis-ci.org/LitGroup/enumerable.php.svg?branch=master)](https://travis-ci.org/LitGroup/enumerable.php)
 
-Installation
-------------
-
+## Installation
 Installation via composer:
 
 ```bash
@@ -19,16 +15,16 @@ composer require litgroup/enumerable=0.2.*
 ```
 
 
-Example of usage.
------------------
-
-###  Define enumerable
+##Example of usage
+### Define enumerable
 1. Create `final` class, which extends `Enumerable`
 2. For each variant of values create a static method, which
    will creates an instance of value. For this purpose your method
-   must call `Enumerable::createEnum()` with index of enum.
+   must call `Enumerable::createEnum()` with some index of value.
 
 > **Note:** Enumerable class must be `final`!
+
+> **Note:** Use scalar types for indexes.
 
 **Enum definition example:**
 
@@ -66,8 +62,8 @@ final class ColorEnum extends Enumerable
 ```
 
 ### Use enumerable
-#### Equolity / Identity
-You can use enumerable values in equolity/identity expressions:
+#### Equality / Identity
+You can use enumerable values in equality/identity expressions:
 
 ```php
 ColorEnum::red() == ColorEnum::red() // => true
@@ -78,7 +74,8 @@ ColorEnum::red() === ColorEnum::blue() // => false
 ```
 
 > **Note:** Enumerables works as runtime constants. Therefor enumerable values can be
-checked on **identity**. And we recomend to use check on identity (`===`) instesd of equolity (`==`) if possible.
+checked on **identity**. And we recomend to use check on identity (`===`) instesd of
+equality (`==`) if possible.
 
 #### Using with switch-case statement
 ```php
@@ -102,7 +99,7 @@ switch ($color) {
 ### Persistence and Serialization
 `Enumerable` works as runtime-constant. Enumerable type cannot be serialized.
 If you need to store representation of enumerable in a database or send
-it via an API you can use index of enumerable as representation.
+it via an API you can use index of enumerable value as representation.
 
 ```php
 $enum->getIndex();
@@ -122,7 +119,7 @@ If you need to get all values of enumerable type, use static method
 `getValues()` on the concrete enum-class.
 
 ```php
-ColorEnum::getValues(); // => Returns array of ColorEnum with enum index as key
+ColorEnum::getValues(); // => Returns array of ColorEnum with index as key
 ```
 
 ### Extensibility
@@ -130,7 +127,7 @@ Instances of your enumerable classes can have additional behaviour if it needed.
 But you cannot define any `public static` methods with behaviour. Public static
 methods used only for creation of values.
 
-> **Note:** you cannot define any `public static` methods with behaviour.
+> **Note:** You cannot define any `public static` methods with behaviour.
 > Public static methods used only for creation of values.
 
 **Example:**
@@ -165,17 +162,13 @@ final class PaymentStatus extends Enumerable {
 }
 ```
 
-Run tests
----------
-
+## Run tests
 ```bash
 composer install
 ./tests.sh
 ```
 
-LICENSE
--------
-
+## LICENSE
 See [LICENSE][license] file.
 
 [license]: https://raw.githubusercontent.com/LitGroup/enumerable.php/master/LICENSE
