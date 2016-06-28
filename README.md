@@ -14,7 +14,7 @@ Installation
 
 Installation via composer:
 
-```
+```bash
 composer require litgroup/enumerable=0.2.*
 ```
 
@@ -23,40 +23,30 @@ Example of usage.
 -----------------
 
 ###  Define enumerable
-
 For example let's create a `ColorEnum`:
     
-1. We need to create custom class, which extends `Enumerable`.
-   We recommend to use `Enum` suffix for all enumerable classes.
-2. Enumerable class must be `final`.
-3. For each variant of values we should create a static method, which
+1. Create `final` class, which extends `Enumerable`
+2. For each variant of values create a static method, which
    will creates an instance of value. For this purpose your method
    must call `Enumerable::createEnum()` with index of enum.
-   You can use some magic literals like `self::createEnum('red')`,
-   but we strongly recommend to use constants: `self::createEnum(self::RED)`.
-   Constants can be used in `switch-case` statements later.
-    
 
-**Enum definition example**
+> **Note:** Enumerable class must be `final`!
+
+**Enum definition example:**
 
 ```php
-
-namespace App;
+namespace Acme;
 
 use LitGroup\Enumerable\Enumerable;
 
 final class ColorEnum extends Enumerable
 {
-    const RED = 'red';
-    const GREEN = 'green';
-    const BLUE = 'blue';
-
     /**
      * @return self
      */
     public static function red()
     {
-        return self::createEnum(self::RED);
+        return self::createEnum('red');
     }
 
     /**
@@ -64,7 +54,7 @@ final class ColorEnum extends Enumerable
      */
     public static function green()
     {
-        return self::createEnum(self::GREEN);
+        return self::createEnum('green');
     }
 
     /**
@@ -72,114 +62,46 @@ final class ColorEnum extends Enumerable
      */
     public static function blue()
     {
-        return self::createEnum(self::BLUE);
+        return self::createEnum('blue');
     }
 }
 ```
 
 ### Use enumerable
-
-Let's imagine, that we want to use some `AlertView` class, which abstracts
-UI notifications and have some levels of importance. Importance can be
-presented as `AlertLevelEnum` and have values: `info`, `warning`, `danger`.
-
-**Declaration of AlertLevelEnum**
+#### Equolity / Identity
+You can use enumerable values in equolity/identity expressions:
 
 ```php
-namespace App;
+ColorEnum::red() == ColorEnum::red() // => true
+ColorEnum::red() === ColorEnum::red() // => true
 
-use LitGroup\Enumerable\Enumerable;
-
-final class AlertLevelEnum extends Enumerable
-{
-    const INFO = 'info';
-    const WARNING = 'warning';
-    const DANGER = 'danger';
- 
-    /**
-     * @return AlertLevelEnum
-     */
-    public static function info()
-    {
-        return self::createEnum(self::INFO);
-    }
-    
-    /**
-     * @return AlertLevelEnum
-     */
-    public static function warning()
-    {
-        return self::createEnum(self::WARNING);
-    }
-    
-    /**
-     * @return AlertLevelEnum
-     */
-    public static function danger()
-    {
-        return self::createEnum(self::DANGER);
-    }
-}
-
+ColorEnum::red() == ColorEnum::blue() // => false
+ColorEnum::red() === ColorEnum::blue() // => false
 ```
 
-**Implementation of AlertView**
+> **Note:** Enumerables works as runtime constants. Therefor enumerable values can be
+checked on **identity**. And we recomend to use check on identity (`===`) instesd of equolity (`==`) if possible.
 
+#### Using with switch-case statement
 ```php
-namespace App;
+$color = ColorEnum::green();
 
-class AlertView
-{
-    /** @var string */
-    private $message;
-    
-    /** @var ColorEnum*/
-    private $level;
-    
-    
-    public function __construct($message, AlertLevelEnum $level)
-    {
-        $this->message = $message;
-        $this->level = $level;
-    }
-    
-    /**
-     * @return string HTML-Representation of alert.
-     */
-    public function renderHtml()
-    {
-        return sprintf(
-            '<div style="background-color: %s">%s</div>',
-            $this->getHtmlColor(),
-            htmlentities($this->message)
-        );
-    }
-    
-    /**
-     * @return string Code of color for CSS.
-     */
-    private function getHtmlColor()
-    {
-        // Resolve color by level of importance:
-        switch ($this->level->index()) {
-            case AlertLevelEnum::INFO:
-                return '#d9edf7';
-            
-            case AlertLevelEnum::WARNING:
-                return '#fcf8e3';
-            
-            case AlertLevelEnum::DANGER:
-                return '#f2dede';
-            
-            default:
-                return '#f5f5f5';
-        }
-    }
+switch ($color) {
+    case ColorEnum::red():
+        echo "Red!\n";
+        break;
+    case ColorEnum::green():
+        echo "Green!\n";
+        break;
+    case ColorEnum::blue():
+        echo "Blue!\n";
+        break;
 }
+
+// "Green!" will be printed
 ```
 
 ### Persistence and Serialization
-
 `Enumerable` works as runtime-constant. Enumerable type cannot be serialized.
 If you need to store representation of enumerable in a database or send
 it via an API you can use index of enumerable as representation.
@@ -189,13 +111,13 @@ $enum->getIndex();
 ```
 
 To restore an instance of enumerable type by index from database or
-from API-request you can use static method `getValue()` on the concrete
+from API-request you can use static method `getValueOf()` on the concrete
 enum-class.
 
 ```php
 $colorIndex = getFromDatabase(/* something */);
 
-$enum = ColorEnum::getValue($colorIndex);
+$enum = ColorEnum::getValueOf($colorIndex);
 ```
 
 If you need to get all values of enumerable type, use static method
@@ -204,6 +126,45 @@ If you need to get all values of enumerable type, use static method
 ```php
 ColorEnum::getValues(); // => Returns array of ColorEnum with enum index as key
 ```
+
+### Extensibility
+Instances of your enumerable classes can have additional behaviour if it needed.
+But you cannot define any `public static` methods with behaviour. Public static
+methods used only for creation of values.
+
+> **Note:** you cannot define any `public static` methods with behaviour.
+> Public static methods used only for creation of values.
+
+**Example:**
+
+```php
+final class PaymentStatus extends Enumerable {
+
+    public static function initiated()
+    {
+        return self::createEnum('initiated');
+    }
+    
+    public static function approved()
+    {
+        returned self::createEnum('approved');
+    }
+    
+    public static function declined()
+    {
+        returned self::createEnum('declined');
+    }
+    
+    /**
+     * Returns true if status is final.
+     *
+     * @return bool
+     */
+    public function isFinal()
+    {
+        return $this === self::approved() || $this === self::declined();
+    }
+}
 
 Run tests
 ---------
