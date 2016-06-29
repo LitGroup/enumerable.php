@@ -23,8 +23,8 @@
     "archive": {
         "exclude": [
             "/tests",
+            "tests.sh",
             "/phpunit.xml.dist",
-            "/phpdoc.dist.xml",
             "/.travis.yml",
             ".gitignore"
         ]
