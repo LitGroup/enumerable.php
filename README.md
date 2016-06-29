@@ -10,10 +10,10 @@
 * [Installation](#installation)
 * [Example of usage](#example-of-usage)
   * [Definition](#definition)
-  * [Usage](#usage)
-    * [Equality/Identity checking](#equality-or-identity-checking)
-    * [Usage in switch-case statement](#switch-case)
-  * [Persistence and Serialization](#persistence-and-serialization)
+  * [Equality/Identity checking](#equality-or-identity-checking)
+  * [Usage in switch-case statement](#switch-case)
+  * [Serialization and Persistence](#serialization-and-persistence)
+  * [Extensibility](#extensibility)
 * [Run tests](#run-tests)
 * [License](#license)
 
@@ -28,14 +28,14 @@ composer require litgroup/enumerable:^0.3
 
 ## <a name="example-of-usage"></a>Example of usage
 ### <a name="definition"></a>Definition
-1. Create `final` class, which extends `Enumerable`
+1. Create `final` class, which extends `Enumerable`;
 2. For each variant of values create a static method, which
    will creates an instance of value. For this purpose your method
    must call `Enumerable::createEnum()` with some index of value.
 
-> **Note:** Enumerable class must be `final`!
-
-> **Note:** Index can be of type `string` or `int`.
+> **Note:**
+> - Enumerable class must be `final`!
+> - Index can be of type `string` or `int`.
 
 **Enum definition example:**
 
@@ -72,8 +72,7 @@ final class ColorEnum extends Enumerable
 }
 ```
 
-### <a name="usage"></a>Usage
-#### <a name="equality-or-identity-checking"></a>Equality/Identity checking
+### <a name="equality-or-identity-checking"></a>Equality/Identity checking
 You can use enumerable values in equality/identity expressions:
 
 ```php
@@ -88,7 +87,7 @@ ColorEnum::red() === ColorEnum::blue() // => false
 checked on **identity**. And we recommend to use check on identity (`===`) instesd of
 equality (`==`) if possible.
 
-#### <a name="switch-case"></a>Usage in switch-case statement
+### <a name="switch-case"></a>Usage in switch-case statement
 ```php
 $color = ColorEnum::green();
 
@@ -107,7 +106,7 @@ switch ($color) {
 // "Green!" will be printed
 ```
 
-### <a name="persistence-and-serialization"></a>Persistence and Serialization
+### <a name="serialization-and-persistence"></a>Serialization and Persistence
 `Enumerable` works as runtime-constant. Enumerable type cannot be serialized.
 If you need to store representation of enumerable in a database or send
 it via an API you can use index of enumerable value as representation.
