@@ -13,7 +13,7 @@
   * [Usage](#usage)
     * [Equality/Identity checking](#equality-or-identity-checking)
     * [Usage in switch-case statement](#switch-case)
-  * [Persistence and Serialization](#percistance-and-serialization)
+  * [Persistence and Serialization](#persistence-and-serialization)
 * [Run tests](#run-tests)
 * [License](#license)
 
@@ -107,7 +107,7 @@ switch ($color) {
 // "Green!" will be printed
 ```
 
-### <a name="persistance-and-serialization"></a>Persistence and Serialization
+### <a name="persistence-and-serialization"></a>Persistence and Serialization
 `Enumerable` works as runtime-constant. Enumerable type cannot be serialized.
 If you need to store representation of enumerable in a database or send
 it via an API you can use index of enumerable value as representation.
