@@ -7,16 +7,27 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)][license]
 [![Build Status](https://travis-ci.org/LitGroup/enumerable.php.svg?branch=master)](https://travis-ci.org/LitGroup/enumerable.php)
 
-## Installation
-Installation via composer:
+* [Installation](#installation)
+* [Example of usage](#example-of-usage)
+  * [Definition](#definition)
+  * [Usage](#usage)
+    * [Equality/Identity checking](#equality-or-identity-checking)
+    * [Usage in switch-case statement](#switch-case)
+  * [Persistence and Serialization](#percistance-and-serialization)
+* [Run tests](#run-tests)
+* [License](#license)
+
+
+## <a name="installation"></a>Installation
+Install via composer:
 
 ```bash
 composer require litgroup/enumerable=0.3.*
 ```
 
 
-##Example of usage
-### Define enumerable
+## <a name="example-of-usage"></a>Example of usage
+### <a name="definition"></a>Definition
 1. Create `final` class, which extends `Enumerable`
 2. For each variant of values create a static method, which
    will creates an instance of value. For this purpose your method
@@ -61,8 +72,8 @@ final class ColorEnum extends Enumerable
 }
 ```
 
-### Use enumerable
-#### Equality / Identity
+### <a name="usage"></a>Usage
+#### <a name="equality-or-identity-checking"></a>Equality/Identity checking
 You can use enumerable values in equality/identity expressions:
 
 ```php
@@ -77,7 +88,7 @@ ColorEnum::red() === ColorEnum::blue() // => false
 checked on **identity**. And we recommend to use check on identity (`===`) instesd of
 equality (`==`) if possible.
 
-#### Using with switch-case statement
+#### <a name="switch-case"></a>Usage in switch-case statement
 ```php
 $color = ColorEnum::green();
 
@@ -96,7 +107,7 @@ switch ($color) {
 // "Green!" will be printed
 ```
 
-### Persistence and Serialization
+### <a name="persistance-and-serialization"></a>Persistence and Serialization
 `Enumerable` works as runtime-constant. Enumerable type cannot be serialized.
 If you need to store representation of enumerable in a database or send
 it via an API you can use index of enumerable value as representation.
@@ -122,7 +133,7 @@ If you need to get all values of enumerable type, use static method
 ColorEnum::getValues(); // => Returns array of ColorEnum with index as key
 ```
 
-### Extensibility
+### <a name="extensibility"></a>Extensibility
 Instances of your enumerable classes can have additional behaviour if it needed.
 But you cannot define any `public static` methods with behaviour. Public static
 methods used only for creation of values.
@@ -167,13 +178,13 @@ final class MergeRequestStatus extends Enumerable {
 }
 ```
 
-## Run tests
+## <a name="run-tests"></a>Run tests
 ```bash
 composer install
 ./tests.sh
 ```
 
-## LICENSE
+## <a name="license"></a>LICENSE
 See [LICENSE][license] file.
 
 [license]: https://raw.githubusercontent.com/LitGroup/enumerable.php/master/LICENSE
