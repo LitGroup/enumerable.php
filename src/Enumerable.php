@@ -44,24 +44,7 @@ abstract class Enumerable
      */
     private $index;
 
-
-    /**
-     * @deprecated 0.4.0 Use getValueOf() instead.
-     *
-     * @param int|string $index
-     *
-     * @return static
-     */
-    final public static function getValue($index)
-    {
-        trigger_error(
-            sprintf('Method %s::getValue() is deprecated. Use getValueOf() instead.', get_called_class()),
-            \E_USER_DEPRECATED
-        );
-
-        return self::getValueOf($index);
-    }
-
+    
     /**
      * Returns an instance of Enumerable by index.
      *

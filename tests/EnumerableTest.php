@@ -45,16 +45,6 @@ class EnumerableTest extends \PHPUnit_Framework_TestCase
         $this->assertNotSame($a, $c);
     }
 
-    public function testGetValue()
-    {
-        $this->setExpectedException(
-            \PHPUnit_Framework_Error_Deprecated::class,
-            'Method Tests\LitGroup\Enumerable\Fixtures\ColorEnum::getValue() is deprecated. Use getValueOf() instead.'
-        );
-
-        ColorEnum::getValue(ColorEnum::RED);
-    }
-
     public function testGetValueOf()
     {
         $this->assertSame(ColorEnum::red(), ColorEnum::getValueOf(ColorEnum::RED));
