@@ -133,16 +133,21 @@ methods used only for creation of values.
 **Example:**
 
 ```php
-final class PaymentStatus extends Enumerable {
+final class MergeRequestStatus extends Enumerable {
 
-    public static function initiated()
+    public static function open()
     {
-        return self::createEnum('initiated');
+        return self::createEnum('open');
     }
     
     public static function approved()
     {
         returned self::createEnum('approved');
+    }
+
+    public static function merged()
+    {
+        return self::createEnum('merged');
     }
     
     public static function declined()
@@ -157,7 +162,7 @@ final class PaymentStatus extends Enumerable {
      */
     public function isFinal()
     {
-        return $this === self::approved() || $this === self::declined();
+        return $this === self::merged() || $this === self::declined();
     }
 }
 ```
