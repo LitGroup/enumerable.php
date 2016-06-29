@@ -74,7 +74,7 @@ ColorEnum::red() === ColorEnum::blue() // => false
 ```
 
 > **Note:** Enumerables works as runtime constants. Therefor enumerable values can be
-checked on **identity**. And we recomend to use check on identity (`===`) instesd of
+checked on **identity**. And we recommend to use check on identity (`===`) instesd of
 equality (`==`) if possible.
 
 #### Using with switch-case statement
