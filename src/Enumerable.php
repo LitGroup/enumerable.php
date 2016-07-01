@@ -182,7 +182,6 @@ abstract class Enumerable
     private static function getServiceMethods()
     {
         return [
-            'getValue',   // TODO: Remove, when method getValue() will be removed.
             'getValueOf',
             'getValues',
         ];
