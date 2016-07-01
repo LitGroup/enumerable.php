@@ -8,11 +8,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\LitGroup\Enumerable\Fixtures;
+namespace Test\LitGroup\Enumerable\Fixtures;
 
 use LitGroup\Enumerable\Enumerable;
 
-final class ColorEnum extends Enumerable
+class NonFinalEnum extends Enumerable
 {
     const RED = 'RED';
     const GREEN = 'GREEN';

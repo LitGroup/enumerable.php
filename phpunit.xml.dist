@@ -14,7 +14,7 @@
 
     <testsuites>
         <testsuite name="litgroup/enumerable">
-            <directory suffix="Test.php">./tests/</directory>
+            <directory suffix="Test.php">./test/</directory>
         </testsuite>
     </testsuites>
 

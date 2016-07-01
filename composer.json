@@ -17,7 +17,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\LitGroup\\Enumerable\\": "tests"
+            "Test\\LitGroup\\Enumerable\\": "test"
         }
     },
     "archive": {

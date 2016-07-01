@@ -8,11 +8,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\LitGroup\Enumerable\Fixtures;
+namespace Test\LitGroup\Enumerable\Fixtures;
 
 use LitGroup\Enumerable\Enumerable;
 
-final class SerializableEnum extends Enumerable implements \Serializable
+final class ColorEnum extends Enumerable
 {
     const RED = 'RED';
     const GREEN = 'GREEN';
@@ -40,15 +40,5 @@ final class SerializableEnum extends Enumerable implements \Serializable
     public static function blue()
     {
         return self::createEnum(self::BLUE);
-    }
-
-    public function serialize()
-    {
-        // Nothing to do.
-    }
-
-    public function unserialize($serialized)
-    {
-        // Nothing to do.
     }
 }

@@ -8,13 +8,13 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\LitGroup\Enumerable;
+namespace Test\LitGroup\Enumerable;
 
-use Tests\LitGroup\Enumerable\Fixtures\ColorEnum;
-use Tests\LitGroup\Enumerable\Fixtures\DuplicateIndexEnum;
-use Tests\LitGroup\Enumerable\Fixtures\FloatIndexedEnum;
-use Tests\LitGroup\Enumerable\Fixtures\SerializableEnum;
-use Tests\LitGroup\Enumerable\Fixtures\NonFinalEnum;
+use Test\LitGroup\Enumerable\Fixtures\ColorEnum;
+use Test\LitGroup\Enumerable\Fixtures\DuplicateIndexEnum;
+use Test\LitGroup\Enumerable\Fixtures\FloatIndexedEnum;
+use Test\LitGroup\Enumerable\Fixtures\SerializableEnum;
+use Test\LitGroup\Enumerable\Fixtures\NonFinalEnum;
 
 class EnumerableTest extends \PHPUnit_Framework_TestCase
 {
@@ -74,7 +74,7 @@ class EnumerableTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \LogicException
-     * @expectedExceptionMessage Enumerable class must be final, but "Tests\LitGroup\Enumerable\Fixtures\NonFinalEnum" is not final.
+     * @expectedExceptionMessage Enumerable class must be final, but "Test\LitGroup\Enumerable\Fixtures\NonFinalEnum" is not final.
      */
     public function testValuesForNonFinalEnum()
     {
@@ -83,7 +83,7 @@ class EnumerableTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \LogicException
-     * @expectedExceptionMessage Enumerable cannot be serializable, but enum class "Tests\LitGroup\Enumerable\Fixtures\SerializableEnum" implements "Serializable" interface.
+     * @expectedExceptionMessage Enumerable cannot be serializable, but enum class "Test\LitGroup\Enumerable\Fixtures\SerializableEnum" implements "Serializable" interface.
      */
     public function testEnumCannotBeSerializable()
     {
