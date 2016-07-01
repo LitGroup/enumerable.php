@@ -21,9 +21,11 @@ class EnumerableTest extends EnumerableTestCase
 {
     public function testIndex()
     {
-        $this->assertEnumIndex(ColorEnum::RED, ColorEnum::red());
-        $this->assertEnumIndex(ColorEnum::GREEN, ColorEnum::green());
-        $this->assertEnumIndex(ColorEnum::BLUE, ColorEnum::blue());
+        $this->assertEnumIndexes([
+            ColorEnum::RED => ColorEnum::red(),
+            ColorEnum::GREEN => ColorEnum::green(),
+            ColorEnum::BLUE => ColorEnum::blue(),
+        ]);
     }
 
     public function testEquality()

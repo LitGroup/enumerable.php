@@ -22,6 +22,31 @@ use LitGroup\Enumerable\Enumerable;
 abstract class EnumerableTestCase extends \PHPUnit_Framework_TestCase
 {
     /**
+     * Asserts indexes for enumerable values.
+     *
+     * @param array $payload Map of index => $value
+     *
+     * @example
+     *     $this->assertEnumIndexes([
+     *         'red'   => ColorEnum::red(),
+     *         'green' => ColorEnum::green(),
+     *         'blue'  => ColorEnum::blue(),
+     *     ]);
+     */
+    public function assertEnumIndexes(array $payload)
+    {
+        if (count($payload) === 0) {
+            throw new \InvalidArgumentException('$payload should not be empty');
+        }
+
+        $expectedClass = get_class(reset($payload));
+        foreach ($payload as $expectedIndex => $value) {
+            $this->assertInstanceOf($expectedClass, $value);
+            $this->assertEnumIndex($expectedIndex, $value);
+        }
+    }
+
+    /**
      * Asserts that Enumerable has the same index as expected.
      *
      * @param mixed $expected Expected index.
