@@ -2,9 +2,12 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
+## [0.4.0] - 2016-07-01
 ## Added
 - Abstract test case for enumerable values `LitGroup\Enumerable\Test\EnumerableTestCase`.
+
+## Removed
+- `Enumerable::getValue()` was removed. Use `Enumerable::getValueOf()` instead.
 
 ## [0.3.0] - 2016-06-28
 ### Added
