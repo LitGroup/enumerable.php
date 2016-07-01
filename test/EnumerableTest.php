@@ -10,39 +10,32 @@
 
 namespace Test\LitGroup\Enumerable;
 
+use LitGroup\Enumerable\Test\EnumerableTestCase;
 use Test\LitGroup\Enumerable\Fixtures\ColorEnum;
 use Test\LitGroup\Enumerable\Fixtures\DuplicateIndexEnum;
 use Test\LitGroup\Enumerable\Fixtures\FloatIndexedEnum;
 use Test\LitGroup\Enumerable\Fixtures\SerializableEnum;
 use Test\LitGroup\Enumerable\Fixtures\NonFinalEnum;
 
-class EnumerableTest extends \PHPUnit_Framework_TestCase
+class EnumerableTest extends EnumerableTestCase
 {
     public function testIndex()
     {
-        $this->assertSame(ColorEnum::RED, ColorEnum::red()->getIndex());
-        $this->assertSame(ColorEnum::GREEN, ColorEnum::green()->getIndex());
-        $this->assertSame(ColorEnum::BLUE, ColorEnum::blue()->getIndex());
+        $this->assertEnumIndex(ColorEnum::RED, ColorEnum::red());
+        $this->assertEnumIndex(ColorEnum::GREEN, ColorEnum::green());
+        $this->assertEnumIndex(ColorEnum::BLUE, ColorEnum::blue());
     }
 
     public function testEquality()
     {
-        $a = ColorEnum::red();
-        $b = ColorEnum::red();
-        $c = ColorEnum::green();
-
-        $this->assertEquals($a, $b);
-        $this->assertNotEquals($a, $c);
+        $this->assertEquals(ColorEnum::red(), ColorEnum::red());
+        $this->assertNotEquals(ColorEnum::red(), ColorEnum::green());
     }
 
     public function testIdentity()
     {
-        $a = ColorEnum::red();
-        $b = ColorEnum::red();
-        $c = ColorEnum::green();
-
-        $this->assertSame($a, $b);
-        $this->assertNotSame($a, $c);
+        $this->assertSame(ColorEnum::red(), ColorEnum::red());
+        $this->assertNotSame(ColorEnum::red(), ColorEnum::green());
     }
 
     public function testSwitchStatement()
@@ -72,6 +65,7 @@ class EnumerableTest extends \PHPUnit_Framework_TestCase
 
     public function testGetValues()
     {
+        $this->assertEnumValuesCount(3, ColorEnum::class);
         $this->assertSame(
             [
                 ColorEnum::RED => ColorEnum::red(),
