@@ -39,9 +39,11 @@ abstract class EnumerableTestCase extends \PHPUnit_Framework_TestCase
             throw new \InvalidArgumentException('$payload should not be empty');
         }
 
-        $expectedClass = get_class(reset($payload));
+        $enumClass = get_class(reset($payload));
+
+        $this->assertEnumValuesCount(count($payload), $enumClass);
         foreach ($payload as $expectedIndex => $value) {
-            $this->assertInstanceOf($expectedClass, $value);
+            $this->assertInstanceOf($enumClass, $value);
             $this->assertEnumIndex($expectedIndex, $value);
         }
     }
@@ -58,17 +60,29 @@ abstract class EnumerableTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Asserts that enumerable class contains exactly $count values.
+     * Asserts that enumerable class contains expected amount of values.
      *
-     * @param int $count Expected number of values.
+     * @param int $expectedAmountOfValues
      * @param string $enumClass Name of enumerable class.
      */
-    public function assertEnumValuesCount($count, $enumClass)
+    public function assertEnumValuesCount($expectedAmountOfValues, $enumClass)
     {
+        $expectedAmountOfValues = (int) $expectedAmountOfValues;
+
         if (!is_subclass_of($enumClass, Enumerable::class)) {
             throw new \InvalidArgumentException('$enumClass must be a name of enumerable class.');
         }
 
-        $this->assertCount($count, call_user_func([$enumClass, 'getValues']));
+        $actualAmountOfValues = count(call_user_func([$enumClass, 'getValues']));
+        $this->assertSame(
+            $expectedAmountOfValues,
+            $actualAmountOfValues,
+            sprintf(
+                'Enumerable class "%s" contains unexpected amount of values (%d instead of %d)',
+                $enumClass,
+                $actualAmountOfValues,
+                $expectedAmountOfValues
+            )
+        );
     }
 }

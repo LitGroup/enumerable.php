@@ -67,7 +67,6 @@ class EnumerableTest extends EnumerableTestCase
 
     public function testGetValues()
     {
-        $this->assertEnumValuesCount(3, ColorEnum::class);
         $this->assertSame(
             [
                 ColorEnum::RED => ColorEnum::red(),
