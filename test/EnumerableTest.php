@@ -14,6 +14,7 @@ use LitGroup\Enumerable\Test\EnumerableTestCase;
 use Test\LitGroup\Enumerable\Fixtures\ColorEnum;
 use Test\LitGroup\Enumerable\Fixtures\DuplicateIndexEnum;
 use Test\LitGroup\Enumerable\Fixtures\FloatIndexedEnum;
+use Test\LitGroup\Enumerable\Fixtures\InvalidReturnTypeEnum;
 use Test\LitGroup\Enumerable\Fixtures\SerializableEnum;
 use Test\LitGroup\Enumerable\Fixtures\NonFinalEnum;
 
@@ -109,5 +110,13 @@ class EnumerableTest extends EnumerableTestCase
     public function testOnlyStringOrIntCanBeUsedForIndex()
     {
         FloatIndexedEnum::one();
+    }
+
+    /**
+     * @expectedException \LogicException
+     */
+    public function testShouldThrowAnExceptionIfEnumMethodReturnsInstanceOfDifferentClass()
+    {
+        InvalidReturnTypeEnum::getValues();
     }
 }

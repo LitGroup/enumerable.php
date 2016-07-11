@@ -141,6 +141,15 @@ abstract class Enumerable
                 /** @var Enumerable $value */
                 $value = $method->invoke(null);
 
+                if (get_class($value) !== $enumClass) {
+                    throw new LogicException(sprintf(
+                        '"%s:%s()" should return an instance of his class. But instance of "%s" given',
+                        $enumClass,
+                        $method,
+                        get_class($value)
+                    ));
+                }
+
                 // Detect duplication of indexes:
                 if (array_key_exists($value->getIndex(), self::$enums[$enumClass])) {
                     throw new LogicException(
