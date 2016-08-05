@@ -15,6 +15,7 @@ use Test\LitGroup\Enumerable\Fixtures\ColorEnum;
 use Test\LitGroup\Enumerable\Fixtures\DuplicateIndexEnum;
 use Test\LitGroup\Enumerable\Fixtures\FloatIndexedEnum;
 use Test\LitGroup\Enumerable\Fixtures\InvalidReturnTypeEnum;
+use Test\LitGroup\Enumerable\Fixtures\InvalidScalarReturnTypeEnum;
 use Test\LitGroup\Enumerable\Fixtures\SerializableEnum;
 use Test\LitGroup\Enumerable\Fixtures\NonFinalEnum;
 
@@ -118,5 +119,13 @@ class EnumerableTest extends EnumerableTestCase
     public function testShouldThrowAnExceptionIfEnumMethodReturnsInstanceOfDifferentClass()
     {
         InvalidReturnTypeEnum::getValues();
+    }
+
+    /**
+     * @expectedException \LogicException
+     */
+    public function testExceptionWhenEnumFactoryMethodReturnsScalarValue()
+    {
+        InvalidScalarReturnTypeEnum::getValues();
     }
 }

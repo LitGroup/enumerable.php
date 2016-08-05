@@ -111,7 +111,7 @@ abstract class Enumerable
     {
         self::$isInInitializationState = true;
         try {
-            $classReflection = new \ReflectionClass($enumClass);
+            $classReflection = new ReflectionClass($enumClass);
 
             // Enumerable must be final:
             if (!$classReflection->isFinal()) {
@@ -141,12 +141,12 @@ abstract class Enumerable
                 /** @var Enumerable $value */
                 $value = $method->invoke(null);
 
-                if (get_class($value) !== $enumClass) {
+                if (!is_object($value) || get_class($value) !== $enumClass) {
                     throw new LogicException(sprintf(
-                        '"%s:%s()" should return an instance of his class. But instance of "%s" given',
+                        '"%s:%s()" should return an instance of its class. But value of type "%s" returned.',
                         $enumClass,
                         $method,
-                        get_class($value)
+                        is_object($value) ? get_class($value) : gettype($value)
                     ));
                 }
 
