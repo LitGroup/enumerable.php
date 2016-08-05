@@ -3,6 +3,8 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Fixed
+- Bug #11. Now Enumerable will throw a `LogicException` if factory method of enumerable returns scalar value.
 
 ## [0.4.1] — 2016-07-11
 ### Changed
