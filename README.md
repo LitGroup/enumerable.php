@@ -152,7 +152,7 @@ final class MergeRequestStatus extends Enumerable {
     
     public static function approved()
     {
-        returned self::createEnum('approved');
+        return self::createEnum('approved');
     }
 
     public static function merged()
@@ -162,7 +162,7 @@ final class MergeRequestStatus extends Enumerable {
     
     public static function declined()
     {
-        returned self::createEnum('declined');
+        return self::createEnum('declined');
     }
     
     /**

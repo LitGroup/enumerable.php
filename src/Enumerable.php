@@ -10,7 +10,6 @@
 
 namespace LitGroup\Enumerable;
 
-
 use ReflectionClass;
 use ReflectionMethod;
 use LogicException;
@@ -44,7 +43,6 @@ abstract class Enumerable
      */
     private $index;
 
-    
     /**
      * Returns an instance of Enumerable by index.
      *
