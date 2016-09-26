@@ -23,7 +23,7 @@ class EnumerableTest extends EnumerableTestCase
 {
     public function testIndex()
     {
-        $this->assertEnumIndexes([
+        $this->assertEnumHasRawValues([
             ColorEnum::RED => ColorEnum::red(),
             ColorEnum::GREEN => ColorEnum::green(),
             ColorEnum::BLUE => ColorEnum::blue(),

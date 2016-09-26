@@ -37,29 +37,29 @@ abstract class Enumerable
     private static $isInInitializationState = false;
 
     /**
-     * Current index of the instance of the enumerable.
+     * Current raw value  of the instance of the enumerable.
      *
      * @var int|string
      */
-    private $index;
+    private $rawValue;
 
     /**
-     * Returns an instance of Enumerable by index.
+     * Returns an instance of Enumerable by raw value.
      *
-     * @param int|string $index
+     * @param int|string $rawValue
      *
      * @return static
      */
-    final public static function getValueOf($index)
+    final public static function getValueOf($rawValue)
     {
         $values = static::getValues();
-        if (!array_key_exists($index, $values)) {
+        if (!array_key_exists($rawValue, $values)) {
             throw new OutOfBoundsException(
-                sprintf('Enum "%s" has no value indexed by "%s".', get_called_class(), $index)
+                sprintf('Enum "%s" has no value with raw value "%s".', get_called_class(), $rawValue)
             );
         }
 
-        return $values[$index];
+        return $values[$rawValue];
     }
 
     /**
@@ -77,13 +77,23 @@ abstract class Enumerable
     }
 
     /**
-     * Returns the index of the enumerable.
+     * Returns the raw value of the enumerable.
      *
      * @return mixed
      */
+    final public function getRawValue()
+    {
+        return $this->rawValue;
+    }
+
+    /**
+     * @deprecated Use getRawValue() instead.
+     */
     final public function getIndex()
     {
-        return $this->index;
+        trigger_error('Method Enumerable::getIndex() is deprecated. Use Enumerable::getRawValueInstead()', \E_USER_DEPRECATED);
+
+        return $this->getRawValue();
     }
 
     /**
@@ -149,12 +159,12 @@ abstract class Enumerable
                 }
 
                 // Detect duplication of indexes:
-                if (array_key_exists($value->getIndex(), self::$enums[$enumClass])) {
+                if (array_key_exists($value->getRawValue(), self::$enums[$enumClass])) {
                     throw new LogicException(
-                        sprintf('Duplicate of index "%s" in enumerable "%s".', $value->getIndex(), $enumClass)
+                        sprintf('Duplicate of index "%s" in enumerable "%s".', $value->getRawValue(), $enumClass)
                     );
                 }
-                self::$enums[$enumClass][$value->getIndex()] = $value;
+                self::$enums[$enumClass][$value->getRawValue()] = $value;
             }
         } finally {
             self::$isInInitializationState = false;
@@ -215,7 +225,7 @@ abstract class Enumerable
             );
         }
 
-        $this->index = $index;
+        $this->rawValue = $index;
     }
 
     final private function __clone() {}

@@ -22,9 +22,9 @@ use LitGroup\Enumerable\Enumerable;
 abstract class EnumerableTestCase extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Asserts indexes for enumerable values.
+     * Asserts rawValues for enumerable values.
      *
-     * @param array $payload Map of index => $value
+     * @param array $payload Map of rawValue => $value
      *
      * @example
      *     $this->assertEnumIndexes([
@@ -33,7 +33,7 @@ abstract class EnumerableTestCase extends \PHPUnit_Framework_TestCase
      *         'blue'  => ColorEnum::blue(),
      *     ]);
      */
-    public function assertEnumIndexes(array $payload)
+    public static function assertEnumHasRawValues(array $payload)
     {
         if (count($payload) === 0) {
             throw new \InvalidArgumentException('$payload should not be empty');
@@ -41,22 +41,46 @@ abstract class EnumerableTestCase extends \PHPUnit_Framework_TestCase
 
         $enumClass = get_class(reset($payload));
 
-        $this->assertEnumValuesCount(count($payload), $enumClass);
+        self::assertEnumValuesCount(count($payload), $enumClass);
         foreach ($payload as $expectedIndex => $value) {
-            $this->assertInstanceOf($enumClass, $value);
-            $this->assertEnumIndex($expectedIndex, $value);
+            self::assertInstanceOf($enumClass, $value);
+            self::assertEnumHasRawValue($expectedIndex, $value);
         }
     }
 
     /**
-     * Asserts that Enumerable has the same index as expected.
+     * @deprecated Use assertEnumRawValues() instead.
+     */
+    public function assertEnumIndexes(array $payload)
+    {
+        trigger_error(
+            sprintf('%s is deprecated. Use ::assertEnumHasRawValues() instead.', __METHOD__),
+            \E_USER_DEPRECATED
+        );
+        self::assertEnumHasRawValues($payload);
+    }
+
+    /**
+     * Asserts that Enumerable has the same raw value as expected.
      *
-     * @param mixed $expected Expected index.
+     * @param mixed $expected Expected raw value.
      * @param Enumerable $enum Enumerable value.
+     */
+    public static function assertEnumHasRawValue($expected, Enumerable $enum)
+    {
+        self::assertSame($expected, $enum->getRawValue());
+    }
+
+    /**
+     * @deprecated Use assertEnumRawValue().
      */
     public function assertEnumIndex($expected, Enumerable $enum)
     {
-        $this->assertSame($expected, $enum->getIndex());
+        trigger_error(
+            sprintf('%s is deprecated. Use ::assertEnumHasRawValue() instead.', __METHOD__),
+            \E_USER_DEPRECATED
+        );
+        self::assertEnumHasRawValue($expected, $enum);
     }
 
     /**
@@ -65,7 +89,7 @@ abstract class EnumerableTestCase extends \PHPUnit_Framework_TestCase
      * @param int $expectedAmountOfValues
      * @param string $enumClass Name of enumerable class.
      */
-    public function assertEnumValuesCount($expectedAmountOfValues, $enumClass)
+    public static function assertEnumValuesCount($expectedAmountOfValues, $enumClass)
     {
         $expectedAmountOfValues = (int) $expectedAmountOfValues;
 
@@ -74,7 +98,7 @@ abstract class EnumerableTestCase extends \PHPUnit_Framework_TestCase
         }
 
         $actualAmountOfValues = count(call_user_func([$enumClass, 'getValues']));
-        $this->assertSame(
+        self::assertSame(
             $expectedAmountOfValues,
             $actualAmountOfValues,
             sprintf(
