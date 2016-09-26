@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## Unreleased
+## 0.5.0 - 2016-09-26
 ### Added
 - `Enumerable::getRawValue()` which replaces `Enumerable::getIndex()`.
 - `EnumerableTestCase::assertEnumHasRawValue()` and `EnumerableTestCase::assertEnumHasRawValues()`.
@@ -20,7 +20,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - Bug #11. Now Enumerable will throw a `LogicException` if factory method of enumerable returns scalar value.
 
-## 0.4.1 — 2016-07-11
+## 0.4.1 - 2016-07-11
 ### Changed
 - EnumerableTestCase::assertEnumIndexes() now checks, that tested enumerable
   class contains amount of values equal to amount of values in the payload of
