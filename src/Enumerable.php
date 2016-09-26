@@ -93,16 +93,6 @@ abstract class Enumerable implements Equatable
     }
 
     /**
-     * @deprecated Use getRawValue() instead.
-     */
-    final public function getIndex()
-    {
-        trigger_error('Method Enumerable::getIndex() is deprecated. Use Enumerable::getRawValueInstead()', \E_USER_DEPRECATED);
-
-        return $this->getRawValue();
-    }
-
-    /**
      * @param int|string $index
      *
      * @return static

@@ -49,18 +49,6 @@ abstract class EnumerableTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @deprecated Use assertEnumRawValues() instead.
-     */
-    public function assertEnumIndexes(array $payload)
-    {
-        trigger_error(
-            sprintf('%s is deprecated. Use ::assertEnumHasRawValues() instead.', __METHOD__),
-            \E_USER_DEPRECATED
-        );
-        self::assertEnumHasRawValues($payload);
-    }
-
-    /**
      * Asserts that Enumerable has the same raw value as expected.
      *
      * @param mixed $expected Expected raw value.
@@ -69,18 +57,6 @@ abstract class EnumerableTestCase extends \PHPUnit_Framework_TestCase
     public static function assertEnumHasRawValue($expected, Enumerable $enum)
     {
         self::assertSame($expected, $enum->getRawValue());
-    }
-
-    /**
-     * @deprecated Use assertEnumRawValue().
-     */
-    public function assertEnumIndex($expected, Enumerable $enum)
-    {
-        trigger_error(
-            sprintf('%s is deprecated. Use ::assertEnumHasRawValue() instead.', __METHOD__),
-            \E_USER_DEPRECATED
-        );
-        self::assertEnumHasRawValue($expected, $enum);
     }
 
     /**
