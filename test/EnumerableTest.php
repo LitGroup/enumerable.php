@@ -11,6 +11,8 @@
 namespace Test\LitGroup\Enumerable;
 
 use LitGroup\Enumerable\Test\EnumerableTestCase;
+use LitGroup\Equatable\Equatable;
+use Test\LitGroup\Enumerable\Fixtures\AnotherColorEnum;
 use Test\LitGroup\Enumerable\Fixtures\ColorEnum;
 use Test\LitGroup\Enumerable\Fixtures\DuplicateIndexEnum;
 use Test\LitGroup\Enumerable\Fixtures\FloatIndexedEnum;
@@ -28,6 +30,17 @@ class EnumerableTest extends EnumerableTestCase
             ColorEnum::GREEN => ColorEnum::green(),
             ColorEnum::BLUE => ColorEnum::blue(),
         ]);
+    }
+
+    public function testItImplementsEquatableInterface()
+    {
+        $this->assertInstanceOf(Equatable::class, ColorEnum::red());
+
+        $this->assertTrue(ColorEnum::red()->equals(ColorEnum::red()));
+        $this->assertFalse(ColorEnum::red()->equals(ColorEnum::blue()));
+
+        $this->assertFalse(ColorEnum::red()->equals(AnotherColorEnum::red()));
+        $this->assertFalse(ColorEnum::red()->equals($this->createMock(Equatable::class)));
     }
 
     public function testEquality()

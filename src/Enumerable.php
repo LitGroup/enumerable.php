@@ -10,6 +10,7 @@
 
 namespace LitGroup\Enumerable;
 
+use LitGroup\Equatable\Equatable;
 use ReflectionClass;
 use ReflectionMethod;
 use LogicException;
@@ -20,7 +21,7 @@ use OutOfBoundsException;
  *
  * @author Roman Shamritskiy <roman@litgroup.ru>
  */
-abstract class Enumerable
+abstract class Enumerable implements Equatable
 {
     /**
      * Cache of all available values of enumerables.
@@ -84,6 +85,11 @@ abstract class Enumerable
     final public function getRawValue()
     {
         return $this->rawValue;
+    }
+
+    public function equals(Equatable $another): bool
+    {
+        return $this === $another;
     }
 
     /**

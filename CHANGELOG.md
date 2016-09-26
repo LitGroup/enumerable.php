@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## Unreleased
+### Added
+- From now `Enumerable` implements `Equatable` interface from package `litgroup/equatable`.
+
+### Changed
+- (BC Break) Requires PHP >=7.0
+
 ## 0.5.0 - 2016-09-26
 ### Added
 - `Enumerable::getRawValue()` which replaces `Enumerable::getIndex()`.
