@@ -22,7 +22,7 @@
 Install via composer:
 
 ```bash
-composer require litgroup/enumerable:^0.4
+composer require litgroup/enumerable:^0.6.0
 ```
 
 
