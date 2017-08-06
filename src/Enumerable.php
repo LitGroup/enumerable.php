@@ -21,7 +21,7 @@ use OutOfBoundsException;
  *
  * @author Roman Shamritskiy <roman@litgroup.ru>
  */
-abstract class Enumerable implements Equatable
+abstract class Enumerable
 {
     /**
      * Cache of all available values of enumerables.
@@ -87,9 +87,16 @@ abstract class Enumerable implements Equatable
         return $this->rawValue;
     }
 
-    public function equals(Equatable $another): bool
+    public function equals(self $enum): bool
     {
-        return $this === $another;
+        if (!$enum instanceof static) {
+            throw new \InvalidArgumentException(sprintf(
+                'Cannot compare instance of "%s" with instance of "%s"',
+                get_class($this),
+                get_class($enum)
+            ));
+        }
+        return $this === $enum;
     }
 
     /**
