@@ -112,7 +112,7 @@ If you need to store representation of enumerable in a database or send
 it via an API you can use index of enumerable value as representation.
 
 ```php
-$enum->getIndex();
+$enum->getRawValue();
 ```
 
 To restore an instance of enumerable type by index from database or
