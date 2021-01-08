@@ -11,6 +11,7 @@
 namespace LitGroup\Enumerable\Test;
 
 use LitGroup\Enumerable\Enumerable;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Abstract test case for enumerable classes.
@@ -19,7 +20,7 @@ use LitGroup\Enumerable\Enumerable;
  *
  * @codeCoverageIgnore
  */
-abstract class EnumerableTestCase extends \PHPUnit_Framework_TestCase
+abstract class EnumerableTestCase extends TestCase
 {
     /**
      * Asserts rawValues for enumerable values.
