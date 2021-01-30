@@ -1,8 +1,14 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](http://keepachangelog.com/) 
+The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
+
+### 0.8.0 - 2021-01-30
+### Added
+- Added support for PHP 8.0+. From now PHP >= 7.3 is supported.
+### Removed
+- Dropped support for PHP < 7.3.
 
 ### 0.7.0 - 2017-08-06
 ### Changed
