@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Removed
 - Dropped support for PHP < 7.3.
 
-### 0.7.0 - 2017-08-06
+## 0.7.0 - 2017-08-06
 ### Changed
 - `Enumerable` does not satisfy to the interface `LitGroup\Equatable` anymore.
 - Method `equals()` now throws an `InvalidArgumentException` when a given
