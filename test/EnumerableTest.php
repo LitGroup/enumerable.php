@@ -69,11 +69,9 @@ class EnumerableTest extends EnumerableTestCase
         $this->assertSame(ColorEnum::blue(), ColorEnum::getValueOf(ColorEnum::BLUE));
     }
 
-    /**
-     * @expectedException \OutOfBoundsException
-     */
     public function testGetValueForNonExistentIndex()
     {
+        $this->expectException(\OutOfBoundsException::class);
         ColorEnum::getValueOf('incorrect_index');
     }
 
@@ -89,53 +87,55 @@ class EnumerableTest extends EnumerableTestCase
         );
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Enumerable class must be final, but "Test\LitGroup\Enumerable\Fixtures\NonFinalEnum" is not final.
-     */
     public function testValuesForNonFinalEnum()
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Enumerable class must be final, but "Test\LitGroup\Enumerable\Fixtures\NonFinalEnum" is not final');
         NonFinalEnum::getValues();
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Enumerable cannot be serializable, but enum class "Test\LitGroup\Enumerable\Fixtures\SerializableEnum" implements "Serializable" interface.
-     */
     public function testEnumCannotBeSerializable()
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Enumerable cannot be serializable, but enum class "Test\LitGroup\Enumerable\Fixtures\SerializableEnum" implements "Serializable" interface');
         SerializableEnum::getValues();
     }
 
-    /**
-     * @expectedException \LogicException
-     */
     public function testInitializationExceptionOnDuplicateIndex()
     {
+        $this->expectException(\LogicException::class);
         DuplicateIndexEnum::some();
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testOnlyStringOrIntCanBeUsedForIndex()
     {
+        $this->expectException(\InvalidArgumentException::class);
         FloatIndexedEnum::one();
     }
 
-    /**
-     * @expectedException \LogicException
-     */
     public function testShouldThrowAnExceptionIfEnumMethodReturnsInstanceOfDifferentClass()
     {
+        $this->expectException(\LogicException::class);
         InvalidReturnTypeEnum::getValues();
     }
 
-    /**
-     * @expectedException \LogicException
-     */
     public function testExceptionWhenEnumFactoryMethodReturnsScalarValue()
     {
+        $this->expectException(\LogicException::class);
         InvalidScalarReturnTypeEnum::getValues();
+    }
+
+    public function testClone(): void
+    {
+        $red = ColorEnum::red();
+        $this->expectException(\BadMethodCallException::class);
+        $otherRed = clone $red;
+    }
+
+    public function testSerialize(): void
+    {
+        $red = ColorEnum::red();
+        $this->expectException(\BadMethodCallException::class);
+        serialize($red);
     }
 }
