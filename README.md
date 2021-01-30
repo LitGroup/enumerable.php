@@ -7,22 +7,23 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)][license]
 [![Build Status](https://travis-ci.org/LitGroup/enumerable.php.svg?branch=master)](https://travis-ci.org/LitGroup/enumerable.php)
 
-* [Installation](#installation)
-* [Example of usage](#example-of-usage)
-  * [Definition](#definition)
-  * [Equality/Identity checking](#equality-or-identity-checking)
-  * [Usage in switch-case statement](#switch-case)
-  * [Serialization and Persistence](#serialization-and-persistence)
-  * [Extensibility](#extensibility)
-* [Run tests](#run-tests)
-* [License](#license)
+- [Enumerable](#enumerable)
+  - [<a name="installation"></a>Installation](#installation)
+  - [<a name="example-of-usage"></a>Example of usage](#example-of-usage)
+    - [<a name="definition"></a>Definition](#definition)
+    - [<a name="equality-or-identity-checking"></a>Equality/Identity checking](#equalityidentity-checking)
+    - [<a name="switch-case"></a>Usage in switch-case statement](#usage-in-switch-case-statement)
+    - [<a name="serialization-and-persistence"></a>Serialization and Persistence](#serialization-and-persistence)
+    - [<a name="extensibility"></a>Extensibility](#extensibility)
+  - [<a name="run-tests"></a>Run tests](#run-tests)
+  - [<a name="license"></a>LICENSE](#license)
 
 
 ## <a name="installation"></a>Installation
 Install via composer:
 
 ```bash
-composer require litgroup/enumerable:^0.7.0
+composer require litgroup/enumerable:^0.8.0
 ```
 
 
@@ -149,7 +150,7 @@ final class MergeRequestStatus extends Enumerable {
     {
         return self::createEnum('open');
     }
-    
+
     public static function approved()
     {
         return self::createEnum('approved');
@@ -159,12 +160,12 @@ final class MergeRequestStatus extends Enumerable {
     {
         return self::createEnum('merged');
     }
-    
+
     public static function declined()
     {
         return self::createEnum('declined');
     }
-    
+
     /**
      * Returns true if status is final.
      *
