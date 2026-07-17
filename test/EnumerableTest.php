@@ -97,6 +97,14 @@ class EnumerableTest extends EnumerableTestCase
         );
     }
 
+    public function testCases(): void
+    {
+        $this->assertSame(
+            [ColorEnum::red(), ColorEnum::green(), ColorEnum::blue()],
+            ColorEnum::cases(),
+        );
+    }
+
     public function testValuesForNonFinalEnum(): void
     {
         $this->expectException(\LogicException::class);
