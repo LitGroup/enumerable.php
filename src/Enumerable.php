@@ -55,7 +55,11 @@ abstract class Enumerable
         $values = static::getValues();
         if (!array_key_exists($rawValue, $values)) {
             throw new OutOfBoundsException(
-                sprintf('Enum "%s" has no value with raw value "%s".', get_called_class(), $rawValue)
+                sprintf(
+                    'Enum "%s" has no value with raw value "%s".',
+                    get_called_class(),
+                    $rawValue,
+                ),
             );
         }
 
@@ -63,17 +67,32 @@ abstract class Enumerable
     }
 
     /**
-     * Returns list of values which available for current enumerable.
+     * Returns map of raw representation to enum values which available for current enumerable.
      *
-     * @return static[]
+     * @return array<string|int, static>
      */
-    final public static function getValues()
+    #[\Deprecated(since: "0.9.0", message: "use cases() instead")]
+    final public static function getValues(): array
     {
         if (self::isEnumNotInitialized(static::class)) {
             self::initializeEnum(static::class);
         }
 
         return self::$enums[static::class];
+    }
+
+    /**
+     * Returns list of cases of the enum.
+     *
+     * @return static[]
+     */
+    final public static function cases(): array
+    {
+        if (self::isEnumNotInitialized(static::class)) {
+            self::initializeEnum(static::class);
+        }
+
+        return array_values(self::$enums[static::class]);
     }
 
     /**
@@ -89,11 +108,13 @@ abstract class Enumerable
     public function equals(self $enum): bool
     {
         if (!$enum instanceof static) {
-            throw new \InvalidArgumentException(sprintf(
-                'Cannot compare instance of "%s" with instance of "%s"',
-                get_class($this),
-                get_class($enum)
-            ));
+            throw new \InvalidArgumentException(
+                sprintf(
+                    'Cannot compare instance of "%s" with instance of "%s"',
+                    get_class($this),
+                    get_class($enum),
+                ),
+            );
         }
         return $this === $enum;
     }
@@ -105,7 +126,9 @@ abstract class Enumerable
      */
     final protected static function createEnum($index)
     {
-        return self::$isInInitializationState ? new static($index) : static::getValueOf($index);
+        return self::$isInInitializationState
+            ? new static($index)
+            : static::getValueOf($index);
     }
 
     /*
@@ -126,7 +149,10 @@ abstract class Enumerable
             // Enumerable must be final:
             if (!$classReflection->isFinal()) {
                 throw new LogicException(
-                    sprintf('Enumerable class must be final, but "%s" is not final.', $enumClass)
+                    sprintf(
+                        'Enumerable class must be final, but "%s" is not final.',
+                        $enumClass,
+                    ),
                 );
             }
 
@@ -135,12 +161,14 @@ abstract class Enumerable
                 throw new LogicException(
                     sprintf(
                         'Enumerable cannot be serializable, but enum class "%s" implements "Serializable" interface.',
-                        $enumClass
-                    )
+                        $enumClass,
+                    ),
                 );
             }
 
-            $methods = $classReflection->getMethods(ReflectionMethod::IS_STATIC);
+            $methods = $classReflection->getMethods(
+                ReflectionMethod::IS_STATIC,
+            );
 
             self::$enums[$enumClass] = [];
             foreach ($methods as $method) {
@@ -152,18 +180,31 @@ abstract class Enumerable
                 $value = $method->invoke(null);
 
                 if (!is_object($value) || get_class($value) !== $enumClass) {
-                    throw new LogicException(sprintf(
-                        '"%s:%s()" should return an instance of its class. But value of type "%s" returned.',
-                        $enumClass,
-                        $method,
-                        is_object($value) ? get_class($value) : gettype($value)
-                    ));
+                    throw new LogicException(
+                        sprintf(
+                            '"%s:%s()" should return an instance of its class. But value of type "%s" returned.',
+                            $enumClass,
+                            $method,
+                            is_object($value)
+                                ? get_class($value)
+                                : gettype($value),
+                        ),
+                    );
                 }
 
                 // Detect duplication of indexes:
-                if (array_key_exists($value->getRawValue(), self::$enums[$enumClass])) {
+                if (
+                    array_key_exists(
+                        $value->getRawValue(),
+                        self::$enums[$enumClass],
+                    )
+                ) {
                     throw new LogicException(
-                        sprintf('Duplicate of index "%s" in enumerable "%s".', $value->getRawValue(), $enumClass)
+                        sprintf(
+                            'Duplicate of index "%s" in enumerable "%s".',
+                            $value->getRawValue(),
+                            $enumClass,
+                        ),
                     );
                 }
                 self::$enums[$enumClass][$value->getRawValue()] = $value;
@@ -192,7 +233,8 @@ abstract class Enumerable
      */
     private static function isServiceMethod(ReflectionMethod $method)
     {
-        return !$method->isPublic() || in_array($method->getShortName(), self::getServiceMethods());
+        return !$method->isPublic() ||
+            in_array($method->getShortName(), self::getServiceMethods());
     }
 
     /**
@@ -200,10 +242,7 @@ abstract class Enumerable
      */
     private static function getServiceMethods()
     {
-        return [
-            'getValueOf',
-            'getValues',
-        ];
+        return ["getValueOf", "getValues", "cases"];
     }
 
     /**
@@ -222,8 +261,8 @@ abstract class Enumerable
             throw new \InvalidArgumentException(
                 sprintf(
                     'Index of enumerable can be a "string" or an "int", but "%s" given.',
-                    is_object($index) ? get_class($index) : gettype($index)
-                )
+                    is_object($index) ? get_class($index) : gettype($index),
+                ),
             );
         }
 
@@ -232,16 +271,22 @@ abstract class Enumerable
 
     final public function __clone()
     {
-        throw new \BadMethodCallException('Cloning is restricted for enumerable types');
+        throw new \BadMethodCallException(
+            "Cloning is restricted for enumerable types",
+        );
     }
 
     final public function __sleep()
     {
-        throw new \BadMethodCallException('Serialization is restricted for enumerable types');
+        throw new \BadMethodCallException(
+            "Serialization is restricted for enumerable types",
+        );
     }
 
     final public function __wakeup()
     {
-        throw new \BadMethodCallException('Serialization is restricted for enumerable types');
+        throw new \BadMethodCallException(
+            "Serialization is restricted for enumerable types",
+        );
     }
 }
