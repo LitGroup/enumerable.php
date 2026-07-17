@@ -13,40 +13,19 @@ stages:
 # Testing
 # ##############################################################################
 
-# test:
-#   stage: test
-#   interruptible: true
-#   image:
-#     name: ${CI_REGISTRY}/fwg/php/litgroup-sdk-dev-environment:php-8.5
-#     pull_policy: always
-#   before_script:
-#     - git config --global --add safe.directory $CI_PROJECT_DIR
-#     - php --version
-#     - composer --version
-#     - composer install --no-interaction --no-ansi
-#   script:
-#     - >
-#       composer test
-#       --
-#       --colors=never
-#       --coverage-text
-#       --only-summary-for-coverage-text
-#       --coverage-cobertura build/reports/cobertura-coverage.xml
-#       --log-junit build/reports/junit-report.xml
-#   coverage: '/^\s*Lines:\s*\d+.\d+\%/'
-#   artifacts:
-#     reports:
-#       junit: build/reports/junit-report.xml
-#       coverage_report:
-#         coverage_format: cobertura
-#         path: build/reports/cobertura-coverage.xml
-
 test:
   stage: test
   interruptible: true
   image:
     name: ${CI_REGISTRY}/fwg/php/litgroup-sdk-dev-environment:php-8.5
     pull_policy: always
+  cache:
+    key:
+      files:
+        - composer.json
+    paths:
+      - composer.lock
+      - vendor
   before_script:
     - git config --global --add safe.directory $CI_PROJECT_DIR
     - php --version
@@ -58,4 +37,13 @@ test:
       --
       --colors=never
       --coverage-text
+      --only-summary-for-coverage-text
+      --coverage-cobertura build/reports/cobertura-coverage.xml
+      --log-junit build/reports/junit-report.xml
   coverage: '/^\s*Lines:\s*\d+.\d+\%/'
+  artifacts:
+    reports:
+      junit: build/reports/junit-report.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: build/reports/cobertura-coverage.xml
