@@ -56,6 +56,7 @@ class EnumerableTest extends EnumerableTestCase
     {
         switch (ColorEnum::green()) {
             case ColorEnum::green():
+                $this->assertTrue(true); // To avoid "no assertion" notification of PHPUnit
                 break;
             default:
                 $this->fail('GREEN case had to be called.');

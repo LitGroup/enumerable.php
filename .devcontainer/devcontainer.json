@@ -1,0 +1,33 @@
+// For format details, see https://aka.ms/devcontainer.json.
+{
+    "name": "enumerable-php",
+    "build": {
+        "dockerfile": "Dockerfile"
+    },
+    // Use 'forwardPorts' to make a list of ports inside the container available locally.
+    // "forwardPorts": [],
+    // Use 'postCreateCommand' to run commands after the container is created.
+    "postCreateCommand": "uname -a && php --version",
+    "postStartCommand": "git config --global --add safe.directory ${containerWorkspaceFolder}",
+    // Comment out to connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
+    "remoteUser": "developer",
+    "forwardPorts": [],
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                // PHP Development extensions
+                "bmewburn.vscode-intelephense-client",
+                "xdebug.php-debug",
+                "recca0120.vscode-phpunit",
+                // - - -
+                "editorconfig.editorconfig",
+                "ms-azuretools.vscode-docker",
+                "ms-vsliveshare.vsliveshare",
+                "redhat.vscode-yaml",
+                "streetsidesoftware.code-spell-checker",
+                "yzhang.markdown-all-in-one"
+            ],
+            "settings": {}
+        }
+    }
+}
