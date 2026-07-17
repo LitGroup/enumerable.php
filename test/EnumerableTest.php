@@ -22,7 +22,7 @@ use Test\LitGroup\Enumerable\Fixtures\NonFinalEnum;
 
 class EnumerableTest extends EnumerableTestCase
 {
-    public function testIndex()
+    public function testIndex(): void
     {
         $this->assertEnumHasRawValues([
             ColorEnum::RED => ColorEnum::red(),
@@ -31,7 +31,7 @@ class EnumerableTest extends EnumerableTestCase
         ]);
     }
 
-    public function testEquality()
+    public function testEquality(): void
     {
         $this->assertEquals(ColorEnum::red(), ColorEnum::red());
         $this->assertNotEquals(ColorEnum::red(), ColorEnum::green());
@@ -40,43 +40,52 @@ class EnumerableTest extends EnumerableTestCase
         $this->assertFalse(ColorEnum::red()->equals(ColorEnum::blue()));
     }
 
-    public function testExceptionOnEqualityCheckOfDifferentTypes()
+    public function testExceptionOnEqualityCheckOfDifferentTypes(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         ColorEnum::red()->equals(AnotherColorEnum::red());
     }
 
-    public function testIdentity()
+    public function testIdentity(): void
     {
         $this->assertSame(ColorEnum::red(), ColorEnum::red());
         $this->assertNotSame(ColorEnum::red(), ColorEnum::green());
     }
 
-    public function testSwitchStatement()
+    public function testSwitchStatement(): void
     {
         switch (ColorEnum::green()) {
             case ColorEnum::green():
                 $this->assertTrue(true); // To avoid "no assertion" notification of PHPUnit
                 break;
             default:
-                $this->fail('GREEN case had to be called.');
+                $this->fail("GREEN case had to be called.");
         }
     }
 
-    public function testGetValueOf()
+    public function testGetValueOf(): void
     {
-        $this->assertSame(ColorEnum::red(), ColorEnum::getValueOf(ColorEnum::RED));
-        $this->assertSame(ColorEnum::green(), ColorEnum::getValueOf(ColorEnum::GREEN));
-        $this->assertSame(ColorEnum::blue(), ColorEnum::getValueOf(ColorEnum::BLUE));
+        $this->assertSame(
+            ColorEnum::red(),
+            ColorEnum::getValueOf(ColorEnum::RED),
+        );
+        $this->assertSame(
+            ColorEnum::green(),
+            ColorEnum::getValueOf(ColorEnum::GREEN),
+        );
+        $this->assertSame(
+            ColorEnum::blue(),
+            ColorEnum::getValueOf(ColorEnum::BLUE),
+        );
     }
 
-    public function testGetValueForNonExistentIndex()
+    public function testGetValueForNonExistentIndex(): void
     {
         $this->expectException(\OutOfBoundsException::class);
-        ColorEnum::getValueOf('incorrect_index');
+        ColorEnum::getValueOf("incorrect_index");
     }
 
-    public function testGetValues()
+    public function testGetValues(): void
     {
         $this->assertSame(
             [
@@ -84,43 +93,47 @@ class EnumerableTest extends EnumerableTestCase
                 ColorEnum::GREEN => ColorEnum::green(),
                 ColorEnum::BLUE => ColorEnum::blue(),
             ],
-            ColorEnum::getValues()
+            ColorEnum::getValues(),
         );
     }
 
-    public function testValuesForNonFinalEnum()
+    public function testValuesForNonFinalEnum(): void
     {
         $this->expectException(\LogicException::class);
-        $this->expectExceptionMessage('Enumerable class must be final, but "Test\LitGroup\Enumerable\Fixtures\NonFinalEnum" is not final');
+        $this->expectExceptionMessage(
+            'Enumerable class must be final, but "Test\LitGroup\Enumerable\Fixtures\NonFinalEnum" is not final',
+        );
         NonFinalEnum::getValues();
     }
 
-    public function testEnumCannotBeSerializable()
+    public function testEnumCannotBeSerializable(): void
     {
         $this->expectException(\LogicException::class);
-        $this->expectExceptionMessage('Enumerable cannot be serializable, but enum class "Test\LitGroup\Enumerable\Fixtures\SerializableEnum" implements "Serializable" interface');
+        $this->expectExceptionMessage(
+            'Enumerable cannot be serializable, but enum class "Test\LitGroup\Enumerable\Fixtures\SerializableEnum" implements "Serializable" interface',
+        );
         SerializableEnum::getValues();
     }
 
-    public function testInitializationExceptionOnDuplicateIndex()
+    public function testInitializationExceptionOnDuplicateIndex(): void
     {
         $this->expectException(\LogicException::class);
         DuplicateIndexEnum::some();
     }
 
-    public function testOnlyStringOrIntCanBeUsedForIndex()
+    public function testOnlyStringOrIntCanBeUsedForIndex(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         FloatIndexedEnum::one();
     }
 
-    public function testShouldThrowAnExceptionIfEnumMethodReturnsInstanceOfDifferentClass()
+    public function testShouldThrowAnExceptionIfEnumMethodReturnsInstanceOfDifferentClass(): void
     {
         $this->expectException(\LogicException::class);
         InvalidReturnTypeEnum::getValues();
     }
 
-    public function testExceptionWhenEnumFactoryMethodReturnsScalarValue()
+    public function testExceptionWhenEnumFactoryMethodReturnsScalarValue(): void
     {
         $this->expectException(\LogicException::class);
         InvalidScalarReturnTypeEnum::getValues();
