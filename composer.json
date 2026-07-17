@@ -20,12 +20,14 @@
             "Test\\LitGroup\\Enumerable\\": "test"
         }
     },
+    "scripts": {
+        "test": "XDEBUG_MODE=\"coverage\" vendor/bin/phpunit",
+        "test-coverage": "@test --coverage-html=build/reports/coverage"
+    },
     "archive": {
         "exclude": [
             "/tests",
-            "tests.sh",
             "/phpunit.xml.dist",
-            "/.travis.yml",
             ".gitignore"
         ]
     },

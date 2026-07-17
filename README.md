@@ -5,7 +5,6 @@
 [![Dev Version](https://img.shields.io/packagist/vpre/litgroup/enumerable.svg)](https://packagist.org/packages/litgroup/enumerable)
 [![Downloads](https://img.shields.io/packagist/dt/litgroup/enumerable.svg)](https://packagist.org/packages/litgroup/enumerable)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)][license]
-[![Build Status](https://travis-ci.org/LitGroup/enumerable.php.svg?branch=master)](https://travis-ci.org/LitGroup/enumerable.php)
 
 - [Enumerable](#enumerable)
   - [<a name="installation"></a>Installation](#installation)
