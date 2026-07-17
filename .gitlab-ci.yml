@@ -58,8 +58,4 @@ test:
       --
       --colors=never
       --coverage-text
-      --log-junit build/reports/junit-report.xml
   coverage: '/^\s*Lines:\s*\d+.\d+\%/'
-  artifacts:
-    reports:
-      junit: build/reports/junit-report.xml
