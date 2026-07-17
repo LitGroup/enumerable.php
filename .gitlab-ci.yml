@@ -1,0 +1,65 @@
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS
+      when: never
+    - if: $CI_COMMIT_TAG
+    - if: $CI_COMMIT_REF_PROTECTED == "true"
+
+stages:
+  - test
+
+# ##############################################################################
+# Testing
+# ##############################################################################
+
+# test:
+#   stage: test
+#   interruptible: true
+#   image:
+#     name: ${CI_REGISTRY}/fwg/php/litgroup-sdk-dev-environment:php-8.5
+#     pull_policy: always
+#   before_script:
+#     - git config --global --add safe.directory $CI_PROJECT_DIR
+#     - php --version
+#     - composer --version
+#     - composer install --no-interaction --no-ansi
+#   script:
+#     - >
+#       composer test
+#       --
+#       --colors=never
+#       --coverage-text
+#       --only-summary-for-coverage-text
+#       --coverage-cobertura build/reports/cobertura-coverage.xml
+#       --log-junit build/reports/junit-report.xml
+#   coverage: '/^\s*Lines:\s*\d+.\d+\%/'
+#   artifacts:
+#     reports:
+#       junit: build/reports/junit-report.xml
+#       coverage_report:
+#         coverage_format: cobertura
+#         path: build/reports/cobertura-coverage.xml
+
+test:
+  stage: test
+  interruptible: true
+  image:
+    name: ${CI_REGISTRY}/fwg/php/litgroup-sdk-dev-environment:php-8.5
+    pull_policy: always
+  before_script:
+    - git config --global --add safe.directory $CI_PROJECT_DIR
+    - php --version
+    - composer --version
+    - composer install --no-interaction --no-ansi
+  script:
+    - >
+      composer test
+      --
+      --colors=never
+      --coverage-text
+      --log-junit build/reports/junit-report.xml
+  coverage: '/^\s*Lines:\s*\d+.\d+\%/'
+  artifacts:
+    reports:
+      junit: build/reports/junit-report.xml
