@@ -220,17 +220,6 @@ abstract class Enumerable
     }
 
     /**
-     * @param string $enumClass
-     *
-     * @return bool
-     */
-    #[\Deprecated]
-    private static function isEnumNotInitialized($enumClass): bool
-    {
-        return !array_key_exists($enumClass, self::$enums);
-    }
-
-    /**
      * Checks that given method is one of service method provided by Enumerable.
      */
     private static function isServiceMethod(ReflectionMethod $method): bool
