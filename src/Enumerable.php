@@ -105,7 +105,7 @@ abstract class Enumerable
     }
 
     /**
-     * Returns map of raw representation to enum values which available for current enumerable.
+     * Returns map of backed values to cases of the enum.
      *
      * @return array<string|int, static>
      */
@@ -138,6 +138,9 @@ abstract class Enumerable
         return $this->value;
     }
 
+    /**
+     * Returns true if other enum case is equal to this one.
+     */
     public function equals(self $other): bool
     {
         return $this === $other;
@@ -155,8 +158,6 @@ abstract class Enumerable
     }
 
     /**
-     * Initializes values of enumerable class.
-     *
      * @param class-string<Enumerable> $class
      */
     private static function initializeEnum(string $class): void
@@ -165,7 +166,6 @@ abstract class Enumerable
             self::$initializationInProgress = true;
 
             $classReflection = new ReflectionClass($class);
-
             // Enumerable must be final:
             if (!$classReflection->isFinal()) {
                 throw new LogicException("Enum class must be final, but $class is not.");
@@ -183,7 +183,6 @@ abstract class Enumerable
 
             // Looking for case factory methods:
             $staticMethods = $classReflection->getMethods(ReflectionMethod::IS_STATIC);
-
             /** @var array<int|string, static> $cases */
             $cases = [];
             $backedType = null;
