@@ -1,21 +1,28 @@
 # Enumerable
-> Library provides support of enumerable classes for PHP.
+
+This library was developed to support enum types before PHP 8.1.
+
+Since release `0.9.0` of the library it provides API similar to current
+PHP 8 backed enum types. Previous API is marked as deprecated.
+This change was made intentionally to support migration to native enums
+in PHP 8.
 
 [![Version](https://img.shields.io/packagist/v/litgroup/enumerable.svg)](https://packagist.org/packages/litgroup/enumerable)
-[![Dev Version](https://img.shields.io/packagist/vpre/litgroup/enumerable.svg)](https://packagist.org/packages/litgroup/enumerable)
 [![Downloads](https://img.shields.io/packagist/dt/litgroup/enumerable.svg)](https://packagist.org/packages/litgroup/enumerable)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)][license]
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
+- - -
 
 - [Enumerable](#enumerable)
-  - [<a name="installation"></a>Installation](#installation)
-  - [<a name="example-of-usage"></a>Example of usage](#example-of-usage)
-    - [<a name="definition"></a>Definition](#definition)
-    - [<a name="equality-or-identity-checking"></a>Equality/Identity checking](#equalityidentity-checking)
-    - [<a name="switch-case"></a>Usage in switch-case statement](#usage-in-switch-case-statement)
-    - [<a name="serialization-and-persistence"></a>Serialization and Persistence](#serialization-and-persistence)
-    - [<a name="extensibility"></a>Extensibility](#extensibility)
-  - [<a name="run-tests"></a>Run tests](#run-tests)
-  - [<a name="license"></a>LICENSE](#license)
+  - [Installation](#installation)
+  - [Example of usage](#example-of-usage)
+    - [Definition](#definition)
+    - [Equality/Identity checking](#equalityidentity-checking)
+    - [Usage in switch-case statement](#usage-in-switch-case-statement)
+    - [Serialization and Persistence](#serialization-and-persistence)
+    - [Extensibility](#extensibility)
+  - [Run tests](#run-tests)
+  - [LICENSE](#license)
 
 
 ## <a name="installation"></a>Installation
@@ -113,7 +120,7 @@ from API-request you can use static method `tryFrom()` on the concrete
 enum-class.
 
 ```php
-$colorRawValue = getFromDatabase(/* something */);
+$colorRawValue = fetchValueFromDatabase(/* something */);
 
 $enum = ColorEnum::tryFrom($colorRawValue);
 ```
