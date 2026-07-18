@@ -10,20 +10,19 @@
 
 namespace Test\LitGroup\Enumerable;
 
-use LitGroup\Enumerable\Test\EnumerableTestCase;
-
+use PHPUnit\Framework\TestCase;
 use Test\LitGroup\Enumerable\Fixtures\{
     AnotherColorEnum,
     ColorEnum,
-    DuplicateIndexEnum,
+    InvalidEnumDuplicatingBackedValues,
     InvalidReturnTypeEnum,
     InvalidScalarReturnTypeEnum,
-    SerializableEnum,
-    NonFinalEnum,
+    InvalidSerializableEnum,
+    InvalidNonFinalEnum,
     QuantityEnum,
 };
 
-class EnumerableTest extends EnumerableTestCase
+class EnumerableTest extends TestCase
 {
     public function testReadingStringBackedValue(): void
     {
@@ -127,7 +126,7 @@ class EnumerableTest extends EnumerableTestCase
         $this->assertSame(ColorEnum::blue(), ColorEnum::getValueOf(ColorEnum::BLUE));
     }
 
-    public function testGetValueForNonExistentIndex(): void
+    public function testGetValueForNonExistentBackedValue(): void
     {
         $this->expectException(\OutOfBoundsException::class);
         ColorEnum::getValueOf("incorrect_index");
@@ -157,32 +156,32 @@ class EnumerableTest extends EnumerableTestCase
     {
         $this->expectException(\LogicException::class);
         $this->expectExceptionMessageIsOrContains("must be final");
-        NonFinalEnum::getValues();
+        InvalidNonFinalEnum::cases();
     }
 
     public function testEnumClassCannotImplementSerializable(): void
     {
         $this->expectException(\LogicException::class);
         $this->expectExceptionMessageIsOrContains("cannot be serialized");
-        SerializableEnum::getValues();
+        InvalidSerializableEnum::cases();
     }
 
     public function testInitializationExceptionOnDuplicateIndex(): void
     {
         $this->expectException(\LogicException::class);
-        DuplicateIndexEnum::some();
+        InvalidEnumDuplicatingBackedValues::cases();
     }
 
-    public function testShouldThrowAnExceptionIfEnumMethodReturnsInstanceOfDifferentClass(): void
+    public function testFactoryMethodReturningUnexpectedTypeResultsToError(): void
     {
         $this->expectException(\LogicException::class);
-        InvalidReturnTypeEnum::getValues();
+        InvalidReturnTypeEnum::cases();
     }
 
-    public function testExceptionWhenEnumFactoryMethodReturnsScalarValue(): void
+    public function testFactoryMethodReturningScalarTypeResultsToError(): void
     {
         $this->expectException(\LogicException::class);
-        InvalidScalarReturnTypeEnum::getValues();
+        InvalidScalarReturnTypeEnum::cases();
     }
 
     public function testClone(): void

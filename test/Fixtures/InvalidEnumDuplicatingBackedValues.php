@@ -12,24 +12,17 @@ namespace Test\LitGroup\Enumerable\Fixtures;
 
 use LitGroup\Enumerable\Enumerable;
 
-class NonFinalEnum extends Enumerable
+final class InvalidEnumDuplicatingBackedValues extends Enumerable
 {
-    const RED = "RED";
-    const GREEN = "GREEN";
-    const BLUE = "BLUE";
+    const VALUE = "some_index";
 
-    public static function red(): self
+    public static function some(): self
     {
-        return self::case(self::RED);
+        return self::case(self::VALUE);
     }
 
-    public static function green(): self
+    public static function another(): self
     {
-        return self::case(self::GREEN);
-    }
-
-    public static function blue(): self
-    {
-        return self::case(self::BLUE);
+        return self::case(self::VALUE);
     }
 }

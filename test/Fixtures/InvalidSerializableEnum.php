@@ -12,7 +12,7 @@ namespace Test\LitGroup\Enumerable\Fixtures;
 
 use LitGroup\Enumerable\Enumerable;
 
-final class SerializableEnum extends Enumerable implements \Serializable
+final class InvalidSerializableEnum extends Enumerable implements \Serializable
 {
     const RED = "RED";
     const GREEN = "GREEN";
