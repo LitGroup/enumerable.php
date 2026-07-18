@@ -7,6 +7,8 @@ PHP 8 backed enum types. Previous API is marked as deprecated.
 This change was made intentionally to support migration to native enums
 in PHP 8.
 
+See [change log](CHANGELOG.md) for more details about API changes.
+
 [![Version](https://img.shields.io/packagist/v/litgroup/enumerable.svg)](https://packagist.org/packages/litgroup/enumerable)
 [![Downloads](https://img.shields.io/packagist/dt/litgroup/enumerable.svg)](https://packagist.org/packages/litgroup/enumerable)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)

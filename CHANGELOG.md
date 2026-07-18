@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## UNRELEASED
+## 0.9.0 - 2026-07-18
 
 This release is an intermediate step for migration to native PHP 8 enums.
 Similar API and behavior is now implemented for `litgroup/enumerable`
@@ -16,7 +16,7 @@ where possible. Previous library API is deprecated now.
 - `Enumerable::from()` — creates a enum from its backed value; results to fatal error for unknown value.
 - `Enumerable::tryFrom()` — creates a enum from its backed value; returns null for unknown value.
 - `Enumerable::cases()` — returns list of cases for the enumerable type.
-- `Enumerable::case()` — adds case of the enum during initialization (replacement for `createEnum`).
+- `Enumerable::case()` — adds case of the enum during initialization (replacement for `createEnum()`).
 - `Enumerable::$value` — public instance property with backed value (replacement for `getRawValue()`).
 
 ### Changed
