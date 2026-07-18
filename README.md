@@ -22,7 +22,7 @@
 Install via composer:
 
 ```bash
-composer require litgroup/enumerable:^0.8.0
+composer require litgroup/enumerable:^0.9.0
 ```
 
 
@@ -31,11 +31,11 @@ composer require litgroup/enumerable:^0.8.0
 1. Create `final` class, which extends `Enumerable`;
 2. For each variant of values create a static method, which
    will creates an instance of value. For this purpose your method
-   must call `Enumerable::createEnum()` with some index of value.
+   must call `Enumerable::case()` with some backed value.
 
 > **Note:**
 > - Enumerable class must be `final`!
-> - Index can be of type `string` or `int`.
+> - Backed can be ether `string` or `int`.
 
 **Enum definition example:**
 
@@ -46,28 +46,19 @@ use LitGroup\Enumerable\Enumerable;
 
 final class ColorEnum extends Enumerable
 {
-    /**
-     * @return self
-     */
-    public static function red()
+    public static function red(): self
     {
-        return self::createEnum('red');
+        return self::case('red');
     }
 
-    /**
-     * @return self
-     */
-    public static function green()
+    public static function green(): self
     {
-        return self::createEnum('green');
+        return self::case('green');
     }
 
-    /**
-     * @return self
-     */
-    public static function blue()
+    public static function blue(): self
     {
-        return self::createEnum('blue');
+        return self::case('blue');
     }
 }
 ```
@@ -83,8 +74,8 @@ ColorEnum::red() == ColorEnum::blue() // => false
 ColorEnum::red() === ColorEnum::blue() // => false
 ```
 
-> **Note:** Enumerables works as runtime constants. Therefor enumerable values can be
-checked on **identity**. And we recommend to use check on identity (`===`) instesd of
+> **Note:** Enumerables works as runtime constants. Therefore enumerable values can be
+checked on **identity**. And we recommend to use check on identity (`===`) instead of
 equality (`==`) if possible.
 
 ### <a name="switch-case"></a>Usage in switch-case statement
@@ -106,71 +97,71 @@ switch ($color) {
 // "Green!" will be printed
 ```
 
+A `match` expression also works es expected.
+
 ### <a name="serialization-and-persistence"></a>Serialization and Persistence
 `Enumerable` works as runtime-constant. Enumerable type cannot be serialized.
 If you need to store representation of enumerable in a database or send
-it via an API you can use index of enumerable value as representation.
+it via an API you can use a backed value of enumerable as its representation.
 
 ```php
-$enum->getRawValue();
+$enum->value;
 ```
 
-To restore an instance of enumerable type by index from database or
-from API-request you can use static method `getValueOf()` on the concrete
+To restore an instance of enumerable type by its backed value from database or
+from API-request you can use static method `tryFrom()` on the concrete
 enum-class.
 
 ```php
-$colorIndex = getFromDatabase(/* something */);
+$colorRawValue = getFromDatabase(/* something */);
 
-$enum = ColorEnum::getValueOf($colorIndex);
+$enum = ColorEnum::tryFrom($colorRawValue);
 ```
 
 If you need to get all values of enumerable type, use static method
-`getValues()` on the concrete enum-class.
+`cases()` on the concrete enum-class.
 
 ```php
-ColorEnum::getValues(); // => Returns array of ColorEnum with index as key
+ColorEnum::cases(); // => Returns a list of enum cases
 ```
 
 ### <a name="extensibility"></a>Extensibility
-Instances of your enumerable classes can have additional behaviour if it needed.
-But you cannot define any `public static` methods with behaviour. Public static
-methods used only for creation of values.
+Instances of your enumerable classes can have additional behavior if it needed.
+But you cannot define any `public static` methods with custom behavior.
+Public static methods used only for initialization of the enum.
 
-> **Note:** You cannot define any `public static` methods with behaviour.
-> Public static methods used only for creation of values.
+> **Note:** You cannot define any `public static` methods with custom behavior.
+> Public static methods used only for initialization of the enum.
 
 **Example:**
 
 ```php
 final class MergeRequestStatus extends Enumerable {
 
-    public static function open()
+    public static function open(): self
     {
-        return self::createEnum('open');
+        return self::case('open');
     }
 
-    public static function approved()
+    public static function approved(): self
     {
-        return self::createEnum('approved');
+        return self::case('approved');
     }
 
-    public static function merged()
+    public static function merged(): self
     {
-        return self::createEnum('merged');
+        return self::case('merged');
     }
 
-    public static function declined()
+    public static function declined(): self
     {
-        return self::createEnum('declined');
+        return self::case('declined');
     }
 
     /**
      * Returns true if status is final.
-     *
-     * @return bool
      */
-    public function isFinal()
+    public function isFinal(): bool
     {
         return $this === self::merged() || $this === self::declined();
     }
@@ -180,10 +171,8 @@ final class MergeRequestStatus extends Enumerable {
 ## <a name="run-tests"></a>Run tests
 ```bash
 composer install
-./tests.sh
+composer test
 ```
 
 ## <a name="license"></a>LICENSE
-See [LICENSE][license] file.
-
-[license]: https://raw.githubusercontent.com/LitGroup/enumerable.php/master/LICENSE
+See [LICENSE](LICENSE) file.
