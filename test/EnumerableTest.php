@@ -198,14 +198,21 @@ class EnumerableTest extends TestCase
     {
         $red = ColorEnum::red();
         $this->expectException(\BadMethodCallException::class);
-        $otherRed = clone $red;
+        clone $red;
     }
 
     public function testSerializationIsRestricted(): void
     {
-        $red = ColorEnum::red();
+        $value = ColorEnum::red();
         $this->expectException(\BadMethodCallException::class);
-        serialize($red);
+        serialize($value);
+    }
+
+    public function testDeserializationIsImpossible(): void
+    {
+        $value = ColorEnum::red();
+        $this->expectException(\BadMethodCallException::class);
+        $value->__unserialize([]);
     }
 
     public function testImplementationOfStringableInterfaceIsDeprecated(): void
