@@ -14,24 +14,21 @@ namespace Test\LitGroup\Enumerable\Fixtures;
 
 use LitGroup\Enumerable\Enumerable;
 
-final class ColorEnum extends Enumerable
+final class DeprecatedStringableEnum extends Enumerable implements \Stringable
 {
-    const RED = "RED";
-    const GREEN = "GREEN";
-    const BLUE = "BLUE";
-
-    public static function red(): self
+    public static function a(): self
     {
-        return self::case(self::RED);
+        return self::case("A");
     }
 
-    public static function green(): self
+    public static function b(): self
     {
-        return self::case(self::GREEN);
+        return self::case("B");
     }
 
-    public static function blue(): self
+    #[\Override]
+    public function __toString(): string
     {
-        return self::case(self::BLUE);
+        return (string) $this->value;
     }
 }

@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## UNRELEASED
 
+This release is an intermediate step for migration to native PHP 8 enums.
+Similar API and behavior is now implemented for `litgroup/enumerable`
+where possible. Previous library API is deprecated now.
+
 ### Added
 
 - `Enumerable::from()` — creates a enum from its backed value; results to fatal error for unknown value.
@@ -30,6 +34,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   by the name of the method.
 - `Enumerable::createEnum()`, use `case()` instead.
 - `Enumerable::getRawValue()`, use `value` property instead.
+- Implementation of `\Stringable` is now deprecated for enum types
+  and triggers `E_USER_DEPRECATED`.
 
 ## 0.8.0 - 2021-01-30
 

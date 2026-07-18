@@ -8,12 +8,15 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Test\LitGroup\Enumerable;
 
 use PHPUnit\Framework\TestCase;
 use Test\LitGroup\Enumerable\Fixtures\{
     AnotherColorEnum,
     ColorEnum,
+    DeprecatedStringableEnum,
     InvalidEnumDuplicatingBackedValues,
     InvalidReturnTypeEnum,
     InvalidScalarReturnTypeEnum,
@@ -184,17 +187,23 @@ class EnumerableTest extends TestCase
         InvalidScalarReturnTypeEnum::cases();
     }
 
-    public function testClone(): void
+    public function testCloningIsRestricted(): void
     {
         $red = ColorEnum::red();
         $this->expectException(\BadMethodCallException::class);
         $otherRed = clone $red;
     }
 
-    public function testSerialize(): void
+    public function testSerializationIsRestricted(): void
     {
         $red = ColorEnum::red();
         $this->expectException(\BadMethodCallException::class);
         serialize($red);
+    }
+
+    public function testImplementationOfStringableInterfaceIsDeprecated(): void
+    {
+        $this->expectUserDeprecationMessage("Implementation of \Stringable is deprecated for enumerable types.");
+        DeprecatedStringableEnum::cases();
     }
 }

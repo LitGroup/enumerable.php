@@ -8,6 +8,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace LitGroup\Enumerable;
 
 use ReflectionClass;
@@ -172,6 +174,10 @@ abstract class Enumerable
                 throw new LogicException(
                     "Enum cannot be serialized, but $class implements Serializable interface.",
                 );
+            }
+            // Enum types should not implement \Stringable, it is deprecated.
+            if (is_subclass_of($class, \Stringable::class)) {
+                trigger_error("Implementation of \Stringable is deprecated for enumerable types.", E_USER_DEPRECATED);
             }
 
             // Looking for case factory methods:
