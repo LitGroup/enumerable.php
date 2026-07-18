@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * This file is part of the "litgroup/enumerable" package.
  *
  * (c) Roman Shamritskiy <roman@litgroup.ru>
@@ -66,15 +66,21 @@ abstract class EnumerableTestCase extends TestCase
      * @param int $expectedAmountOfValues
      * @param string $enumClass Name of enumerable class.
      */
-    public static function assertEnumValuesCount($expectedAmountOfValues, $enumClass)
-    {
+    public static function assertEnumValuesCount(
+        $expectedAmountOfValues,
+        $enumClass,
+    ) {
         $expectedAmountOfValues = (int) $expectedAmountOfValues;
 
         if (!is_subclass_of($enumClass, Enumerable::class)) {
-            throw new \InvalidArgumentException('$enumClass must be a name of enumerable class.');
+            throw new \InvalidArgumentException(
+                '$enumClass must be a name of enumerable class.',
+            );
         }
 
-        $actualAmountOfValues = count(call_user_func([$enumClass, 'getValues']));
+        $actualAmountOfValues = count(
+            call_user_func([$enumClass, "getValues"]),
+        );
         self::assertSame(
             $expectedAmountOfValues,
             $actualAmountOfValues,
@@ -82,8 +88,8 @@ abstract class EnumerableTestCase extends TestCase
                 'Enumerable class "%s" contains unexpected amount of values (%d instead of %d)',
                 $enumClass,
                 $actualAmountOfValues,
-                $expectedAmountOfValues
-            )
+                $expectedAmountOfValues,
+            ),
         );
     }
 }

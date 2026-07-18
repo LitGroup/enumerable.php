@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * This file is part of the "litgroup/enumerable" package.
  *
  * (c) Roman Shamritskiy <roman@litgroup.ru>
@@ -16,6 +16,6 @@ final class InvalidScalarReturnTypeEnum extends Enumerable
 {
     public static function someValue()
     {
-        return 'not an object';
+        return "not an object";
     }
 }

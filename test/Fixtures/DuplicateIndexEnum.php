@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * This file is part of the "litgroup/enumerable" package.
  *
  * (c) Roman Shamritskiy <roman@litgroup.ru>
@@ -14,7 +14,7 @@ use LitGroup\Enumerable\Enumerable;
 
 final class DuplicateIndexEnum extends Enumerable
 {
-    const INDEX = 'some_index';
+    const INDEX = "some_index";
 
     /**
      * @return self

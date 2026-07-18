@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * This file is part of the "litgroup/enumerable" package.
  *
  * (c) Roman Shamritskiy <roman@litgroup.ru>
@@ -14,9 +14,9 @@ use LitGroup\Enumerable\Enumerable;
 
 final class SerializableEnum extends Enumerable implements \Serializable
 {
-    const RED = 'RED';
-    const GREEN = 'GREEN';
-    const BLUE = 'BLUE';
+    const RED = "RED";
+    const GREEN = "GREEN";
+    const BLUE = "BLUE";
 
     /**
      * @return self
