@@ -22,17 +22,11 @@ use OutOfBoundsException;
  */
 abstract class Enumerable
 {
-    private const SERVICE_METHOD_NAMES = [
-        "getValueOf",
-        "getValues",
-        "cases",
-        "from",
-        "tryFrom",
-    ];
+    private const SERVICE_METHOD_NAMES = ["getValueOf", "getValues", "cases", "from", "tryFrom"];
 
     /**
-     * Cache of all available values of enumerables.
-     *
+     * Instances of all initialized enum values.
+     * 
      * @var array<class-string<Enumerable>, array<int|string, Enumerable>>
      */
     private static array $enums = [];
@@ -42,7 +36,7 @@ abstract class Enumerable
      *
      * @var bool
      */
-    private static bool $isInInitializationState = false;
+    private static bool $initializationInProgress = false;
 
     /**
      * @param int|string $value The backed value of the case.
@@ -55,9 +49,7 @@ abstract class Enumerable
     #[\NoDiscard]
     final protected static function case(int|string $value): static
     {
-        return self::$isInInitializationState
-            ? new static($value)
-            : static::getValueOf($value);
+        return self::$initializationInProgress ? new static($value) : static::from($value);
     }
 
     /**
@@ -105,11 +97,7 @@ abstract class Enumerable
     {
         return self::tryFrom($value) ??
             throw new OutOfBoundsException(
-                sprintf(
-                    'Enum "%s" has no value with raw value "%s".',
-                    get_called_class(),
-                    $value,
-                ),
+                sprintf('Enum "%s" has no value with backed value "%s".', static::class, $value),
             );
     }
 
@@ -141,7 +129,7 @@ abstract class Enumerable
     /**
      * Returns the backed value of the enum.
      */
-    #[\Deprecated("use ->value property instead", since: "0.9.0")]
+    #[\Deprecated("use `value` property instead", since: "0.9.0")]
     final public function getRawValue(): int|string
     {
         return $this->value;
@@ -154,87 +142,74 @@ abstract class Enumerable
 
     private static function initializeIfNotYet(): void
     {
-        if (self::isEnumNotInitialized(static::class)) {
-            self::initializeEnum(static::class);
+        if (array_key_exists(static::class, self::$enums)) {
+            // Current enum type is initialized already.
+            // Nothing to do.
+            return;
         }
+
+        self::initializeEnum(static::class);
     }
 
     /**
      * Initializes values of enumerable class.
      *
-     * @param class-string<Enumerable> $enumClass
+     * @param class-string<Enumerable> $class
      */
-    private static function initializeEnum($enumClass): void
+    private static function initializeEnum(string $class): void
     {
-        self::$isInInitializationState = true;
         try {
-            $classReflection = new ReflectionClass($enumClass);
+            self::$initializationInProgress = true;
+
+            $classReflection = new ReflectionClass($class);
 
             // Enumerable must be final:
             if (!$classReflection->isFinal()) {
-                throw new LogicException(
-                    sprintf(
-                        'Enumerable class must be final, but "%s" is not final.',
-                        $enumClass,
-                    ),
-                );
+                throw new LogicException("Enum class must be final, but $class is not.");
             }
-
             // Enumerable cannot be Serializable:
-            if (is_subclass_of($enumClass, \Serializable::class)) {
+            if (is_subclass_of($class, \Serializable::class)) {
                 throw new LogicException(
-                    sprintf(
-                        'Enumerable cannot be serializable, but enum class "%s" implements "Serializable" interface.',
-                        $enumClass,
-                    ),
+                    "Enum cannot be serialized, but $class implements Serializable interface.",
                 );
             }
 
-            $methods = $classReflection->getMethods(
-                ReflectionMethod::IS_STATIC,
-            );
+            // Looking for case factory methods:
+            $staticMethods = $classReflection->getMethods(ReflectionMethod::IS_STATIC);
 
-            self::$enums[$enumClass] = [];
-            foreach ($methods as $method) {
+            /** @var array<int|string, static> $cases */
+            $cases = [];
+
+            foreach ($staticMethods as $method) {
                 if (self::isServiceMethod($method)) {
                     continue;
                 }
 
-                /** @var Enumerable $value */
-                $value = $method->invoke(null);
-
-                if (!is_object($value) || get_class($value) !== $enumClass) {
+                $instance = $method->invoke(null);
+                if (!$instance instanceof static) {
                     throw new LogicException(
                         sprintf(
                             '"%s:%s()" should return an instance of its class. But value of type "%s" returned.',
-                            $enumClass,
+                            $class,
                             $method,
-                            is_object($value)
-                                ? get_class($value)
-                                : gettype($value),
+                            is_object($instance) ? get_class($instance) : gettype($instance),
                         ),
                     );
                 }
 
-                // Detect duplication of indexes:
-                if (
-                    array_key_exists(
-                        $value->getRawValue(),
-                        self::$enums[$enumClass],
-                    )
-                ) {
+                // Detect duplication of backed value:
+                if (array_key_exists($instance->value, $cases)) {
                     throw new LogicException(
-                        sprintf(
-                            'Duplicate of index "%s" in enumerable "%s".',
-                            $value->getRawValue(),
-                            $enumClass,
-                        ),
+                        "Duplicate of backed value `{$instance->value}` in enum $class.",
                     );
                 }
-                self::$enums[$enumClass][$value->getRawValue()] = $value;
+                $cases[$instance->value] = $instance;
             }
+
+            // Commit initialized cases:
+            self::$enums[$class] = $cases;
         } finally {
-            self::$isInInitializationState = false;
+            self::$initializationInProgress = false;
         }
     }
 
@@ -243,6 +218,7 @@ abstract class Enumerable
      *
      * @return bool
      */
+    #[\Deprecated]
     private static function isEnumNotInitialized($enumClass): bool
     {
         return !array_key_exists($enumClass, self::$enums);
@@ -257,24 +233,18 @@ abstract class Enumerable
             in_array($method->getShortName(), self::SERVICE_METHOD_NAMES);
     }
 
-    final public function __clone()
+    final public function __clone(): never
     {
-        throw new \BadMethodCallException(
-            "Cloning is restricted for enumerable types",
-        );
+        throw new \BadMethodCallException("Cloning is restricted for enumerable types");
     }
 
-    final public function __sleep()
+    final public function __serialize(): never
     {
-        throw new \BadMethodCallException(
-            "Serialization is restricted for enumerable types",
-        );
+        throw new \BadMethodCallException("Serialization is restricted for enumerable types");
     }
 
-    final public function __wakeup()
+    final public function __unserialize(array $data): never
     {
-        throw new \BadMethodCallException(
-            "Serialization is restricted for enumerable types",
-        );
+        throw new \BadMethodCallException("Serialization is restricted for enumerable types");
     }
 }

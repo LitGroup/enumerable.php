@@ -122,18 +122,9 @@ class EnumerableTest extends EnumerableTestCase
 
     public function testGetValueOf(): void
     {
-        $this->assertSame(
-            ColorEnum::red(),
-            ColorEnum::getValueOf(ColorEnum::RED),
-        );
-        $this->assertSame(
-            ColorEnum::green(),
-            ColorEnum::getValueOf(ColorEnum::GREEN),
-        );
-        $this->assertSame(
-            ColorEnum::blue(),
-            ColorEnum::getValueOf(ColorEnum::BLUE),
-        );
+        $this->assertSame(ColorEnum::red(), ColorEnum::getValueOf(ColorEnum::RED));
+        $this->assertSame(ColorEnum::green(), ColorEnum::getValueOf(ColorEnum::GREEN));
+        $this->assertSame(ColorEnum::blue(), ColorEnum::getValueOf(ColorEnum::BLUE));
     }
 
     public function testGetValueForNonExistentIndex(): void
@@ -162,21 +153,17 @@ class EnumerableTest extends EnumerableTestCase
         );
     }
 
-    public function testValuesForNonFinalEnum(): void
+    public function testEnumClassMustBeFinal(): void
     {
         $this->expectException(\LogicException::class);
-        $this->expectExceptionMessage(
-            'Enumerable class must be final, but "Test\LitGroup\Enumerable\Fixtures\NonFinalEnum" is not final',
-        );
+        $this->expectExceptionMessageIsOrContains("must be final");
         NonFinalEnum::getValues();
     }
 
-    public function testEnumCannotBeSerializable(): void
+    public function testEnumClassCannotImplementSerializable(): void
     {
         $this->expectException(\LogicException::class);
-        $this->expectExceptionMessage(
-            'Enumerable cannot be serializable, but enum class "Test\LitGroup\Enumerable\Fixtures\SerializableEnum" implements "Serializable" interface',
-        );
+        $this->expectExceptionMessageIsOrContains("cannot be serialized");
         SerializableEnum::getValues();
     }
 
