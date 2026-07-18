@@ -16,6 +16,7 @@ use PHPUnit\Framework\TestCase;
 use Test\LitGroup\Enumerable\Fixtures\{
     AnotherColorEnum,
     ColorEnum,
+    DeprecatedInitializedEnum,
     DeprecatedStringableEnum,
     EmptyEnum,
     InvalidEnumDuplicatingBackedValues,
@@ -211,5 +212,11 @@ class EnumerableTest extends TestCase
     {
         $this->expectUserDeprecationMessage("Implementation of \Stringable is deprecated for enumerable types.");
         DeprecatedStringableEnum::cases();
+    }
+
+    public function testDeprecatedInitializationAPI(): void
+    {
+        $value = DeprecatedInitializedEnum::some();
+        $this->assertEquals("some", $value->getRawValue());
     }
 }
