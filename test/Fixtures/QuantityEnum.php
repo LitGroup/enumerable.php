@@ -12,24 +12,24 @@ namespace Test\LitGroup\Enumerable\Fixtures;
 
 use LitGroup\Enumerable\Enumerable;
 
-final class AnotherColorEnum extends Enumerable
+final class QuantityEnum extends Enumerable
 {
-    const RED = "RED";
-    const GREEN = "GREEN";
-    const BLUE = "BLUE";
+    const SINGLE = 1;
+    const DOUBLE = 2;
+    const TRIPLE = 3;
 
-    public static function red(): self
+    public static function single(): self
     {
-        return self::case(self::RED);
+        return self::case(self::SINGLE);
     }
 
-    public static function green(): self
+    public static function double(): self
     {
-        return self::case(self::GREEN);
+        return self::case(self::DOUBLE);
     }
 
-    public static function blue(): self
+    public static function triple(): self
     {
-        return self::case(self::BLUE);
+        return self::case(self::TRIPLE);
     }
 }

@@ -2,7 +2,7 @@
 /*
  * This file is part of the "litgroup/enumerable" package.
  *
- * (c) Roman Shamritskiy <roman@litgroup.ru>
+ * (c) Roman Shamritskiy <r.shamritskiy@litgroup.ru>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -11,39 +11,52 @@
 namespace Test\LitGroup\Enumerable;
 
 use LitGroup\Enumerable\Test\EnumerableTestCase;
-use Test\LitGroup\Enumerable\Fixtures\AnotherColorEnum;
-use Test\LitGroup\Enumerable\Fixtures\ColorEnum;
-use Test\LitGroup\Enumerable\Fixtures\DuplicateIndexEnum;
-use Test\LitGroup\Enumerable\Fixtures\FloatIndexedEnum;
-use Test\LitGroup\Enumerable\Fixtures\InvalidReturnTypeEnum;
-use Test\LitGroup\Enumerable\Fixtures\InvalidScalarReturnTypeEnum;
-use Test\LitGroup\Enumerable\Fixtures\SerializableEnum;
-use Test\LitGroup\Enumerable\Fixtures\NonFinalEnum;
+
+use Test\LitGroup\Enumerable\Fixtures\{
+    AnotherColorEnum,
+    ColorEnum,
+    DuplicateIndexEnum,
+    InvalidReturnTypeEnum,
+    InvalidScalarReturnTypeEnum,
+    SerializableEnum,
+    NonFinalEnum,
+    QuantityEnum,
+};
 
 class EnumerableTest extends EnumerableTestCase
 {
-    public function testIndex(): void
+    public function testReadingStringBackedValue(): void
     {
-        $this->assertEnumHasRawValues([
-            ColorEnum::RED => ColorEnum::red(),
-            ColorEnum::GREEN => ColorEnum::green(),
-            ColorEnum::BLUE => ColorEnum::blue(),
-        ]);
+        $this->assertSame(ColorEnum::RED, ColorEnum::red()->value);
+        $this->assertSame(ColorEnum::GREEN, ColorEnum::green()->value);
+        $this->assertSame(ColorEnum::BLUE, ColorEnum::blue()->value);
+    }
+
+    public function testReadingIntBackedValue(): void
+    {
+        $this->assertSame(QuantityEnum::SINGLE, QuantityEnum::single()->value);
+        $this->assertSame(QuantityEnum::DOUBLE, QuantityEnum::double()->value);
+        $this->assertSame(QuantityEnum::TRIPLE, QuantityEnum::triple()->value);
     }
 
     public function testEquality(): void
     {
+        // Test equality with `==` operator.
         $this->assertEquals(ColorEnum::red(), ColorEnum::red());
         $this->assertNotEquals(ColorEnum::red(), ColorEnum::green());
+        $this->assertNotEquals(
+            ColorEnum::red(),
+            AnotherColorEnum::red(),
+            "Same backed value but different enum type.",
+        );
 
+        // Test equality with equals() method.
         $this->assertTrue(ColorEnum::red()->equals(ColorEnum::red()));
         $this->assertFalse(ColorEnum::red()->equals(ColorEnum::blue()));
-    }
-
-    public function testExceptionOnEqualityCheckOfDifferentTypes(): void
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        ColorEnum::red()->equals(AnotherColorEnum::red());
+        $this->assertFalse(
+            ColorEnum::red()->equals(AnotherColorEnum::red()),
+            "Same backed value but different enum type.",
+        );
     }
 
     public function testIdentity(): void
@@ -52,15 +65,59 @@ class EnumerableTest extends EnumerableTestCase
         $this->assertNotSame(ColorEnum::red(), ColorEnum::green());
     }
 
-    public function testSwitchStatement(): void
+    public function testSwitchStatementBehavior(): void
     {
         switch (ColorEnum::green()) {
+            case ColorEnum::red():
+                $this->fail("GREEN case had to be called.");
             case ColorEnum::green():
                 $this->assertTrue(true); // To avoid "no assertion" notification of PHPUnit
                 break;
             default:
                 $this->fail("GREEN case had to be called.");
         }
+    }
+
+    public function testMatchExpressionBehavior(): void
+    {
+        $value = match (ColorEnum::green()) {
+            ColorEnum::red() => "red",
+            ColorEnum::green() => "green", // expected arm
+            ColorEnum::blue() => "blue",
+        };
+
+        $this->assertEquals("green", $value);
+    }
+
+    public function testDecodingEnumFromBackedValueOrNull(): void
+    {
+        // Call tryFrom() first to check enum internal initialization is triggered byt he method
+        $this->assertNotNull(ColorEnum::tryFrom("RED"));
+        $this->assertSame(ColorEnum::red(), ColorEnum::tryFrom("RED"));
+        $this->assertNotNull(ColorEnum::tryFrom("GREEN"));
+        $this->assertSame(ColorEnum::green(), ColorEnum::tryFrom("GREEN"));
+
+        $this->assertSame(QuantityEnum::single(), QuantityEnum::tryFrom(1));
+        $this->assertSame(QuantityEnum::double(), QuantityEnum::tryFrom(2));
+
+        $this->assertNull(ColorEnum::tryFrom("unknown"));
+        $this->assertNull(QuantityEnum::tryFrom("unknown"));
+        $this->assertNull(QuantityEnum::tryFrom(100));
+    }
+
+    public function testDecodingFormBackedValue(): void
+    {
+        $this->assertSame(ColorEnum::red(), ColorEnum::from("RED"));
+        $this->assertSame(ColorEnum::green(), ColorEnum::from("GREEN"));
+
+        $this->assertSame(QuantityEnum::single(), QuantityEnum::from(1));
+        $this->assertSame(QuantityEnum::double(), QuantityEnum::from(2));
+    }
+
+    public function testDecodingFromBackedValueFails(): void
+    {
+        $this->expectException(\ValueError::class);
+        ColorEnum::from("unknown");
     }
 
     public function testGetValueOf(): void
@@ -127,12 +184,6 @@ class EnumerableTest extends EnumerableTestCase
     {
         $this->expectException(\LogicException::class);
         DuplicateIndexEnum::some();
-    }
-
-    public function testOnlyStringOrIntCanBeUsedForIndex(): void
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        FloatIndexedEnum::one();
     }
 
     public function testShouldThrowAnExceptionIfEnumMethodReturnsInstanceOfDifferentClass(): void

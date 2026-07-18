@@ -2,7 +2,7 @@
 /*
  * This file is part of the "litgroup/enumerable" package.
  *
- * (c) Roman Shamritskiy <roman@litgroup.ru>
+ * (c) Roman Shamritskiy <r.shamritskiy@litgroup.ru>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -20,16 +20,16 @@ class NonFinalEnum extends Enumerable
 
     public static function red(): self
     {
-        return self::createEnum(self::RED);
+        return self::case(self::RED);
     }
 
     public static function green(): self
     {
-        return self::createEnum(self::GREEN);
+        return self::case(self::GREEN);
     }
 
     public static function blue(): self
     {
-        return self::createEnum(self::BLUE);
+        return self::case(self::BLUE);
     }
 }

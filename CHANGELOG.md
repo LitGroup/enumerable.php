@@ -9,13 +9,27 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
+- `Enumerable::from()` — creates a enum from its backed value; results to fatal error for unknown value.
+- `Enumerable::tryFrom()` — creates a enum from its backed value; returns null for unknown value.
 - `Enumerable::cases()` — returns list of cases for the enumerable type.
+- `Enumerable::case()` — adds case of the enum during initialization (replacement for `createEnum`).
+- `Enumerable::$value` — public instance property with backed value (replacement for `getRawValue()`).
+
+### Changed
+
+- (BC) PHP >= 8.5 is required now.
+- `Enumerable::equals()` does not trow `InvalidArgumentException` for enum type
+  mismatch anymore. From now, it returns `false`. This change makes behavior of
+  `equals()` consistent with `===` and `==` operators.
 
 ### Deprecated
 
+- `Enumerable::getValueOf()` is deprecated, use `from()` or `tryFrom()` instead.
 - `Enumerable::getValues()` is deprecated because of confusing behavior,
   it returns map like `[raw value => enum]` instead of list of enums as expected
   by the name of the method.
+- `Enumerable::createEnum()`, use `case()` instead.
+- `Enumerable::getRawValue()`, use `value` property instead.
 
 ## 0.8.0 - 2021-01-30
 
@@ -60,7 +74,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - `Enumerable::getIndex()`. Use `Enumerable::getRawValue()` instead.
 - `EnumerableTestCase::assertEnumIndex()`. Use `EnumerableTestCase::assertEnumHasRawValue()` instead.
-- `EnumerableTestCase::assertEnumIndexs()`. Use `EnumerableTestCase::assertEnumHasRawValues()` instead.
+- `EnumerableTestCase::assertEnumIndexes()`. Use `EnumerableTestCase::assertEnumHasRawValues()` instead.
 
 ### Fixed
 

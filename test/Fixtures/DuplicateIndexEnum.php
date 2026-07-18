@@ -2,7 +2,7 @@
 /*
  * This file is part of the "litgroup/enumerable" package.
  *
- * (c) Roman Shamritskiy <roman@litgroup.ru>
+ * (c) Roman Shamritskiy <r.shamritskiy@litgroup.ru>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,11 +18,11 @@ final class DuplicateIndexEnum extends Enumerable
 
     public static function some(): self
     {
-        return self::createEnum(self::INDEX);
+        return self::case(self::INDEX);
     }
 
     public static function another(): self
     {
-        return self::createEnum(self::INDEX);
+        return self::case(self::INDEX);
     }
 }

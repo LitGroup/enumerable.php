@@ -2,7 +2,7 @@
 /*
  * This file is part of the "litgroup/enumerable" package.
  *
- * (c) Roman Shamritskiy <roman@litgroup.ru>
+ * (c) Roman Shamritskiy <r.shamritskiy@litgroup.ru>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,9 +16,10 @@ use PHPUnit\Framework\TestCase;
 /**
  * Abstract test case for enumerable classes.
  *
- * @author Roman Shamritskiy <roman@litgroup.ru>
+ * @author Roman Shamritskiy <r.shamritskiy@litgroup.ru>
  *
  * @codeCoverageIgnore
+ * @deprecated Since 0.9.0, will be removed in 0.10.0.
  */
 abstract class EnumerableTestCase extends TestCase
 {
@@ -34,6 +35,7 @@ abstract class EnumerableTestCase extends TestCase
      *         'blue'  => ColorEnum::blue(),
      *     ]);
      */
+    #[\Deprecated(since: "0.9.0")]
     public static function assertEnumHasRawValues(array $payload): void
     {
         if (count($payload) === 0) {
@@ -55,11 +57,12 @@ abstract class EnumerableTestCase extends TestCase
      * @param mixed $expected Expected raw value.
      * @param Enumerable $enum Enumerable value.
      */
+    #[\Deprecated(since: "0.9.0")]
     public static function assertEnumHasRawValue(
         $expected,
         Enumerable $enum,
     ): void {
-        self::assertSame($expected, $enum->getRawValue());
+        self::assertSame($expected, $enum->value);
     }
 
     /**
@@ -68,6 +71,7 @@ abstract class EnumerableTestCase extends TestCase
      * @param int $expectedAmountOfValues
      * @param string $enumClass Name of enumerable class.
      */
+    #[\Deprecated(since: "0.9.0")]
     public static function assertEnumValuesCount(
         $expectedAmountOfValues,
         $enumClass,

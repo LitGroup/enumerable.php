@@ -2,7 +2,7 @@
 /*
  * This file is part of the "litgroup/enumerable" package.
  *
- * (c) Roman Shamritskiy <roman@litgroup.ru>
+ * (c) Roman Shamritskiy <r.shamritskiy@litgroup.ru>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,52 +18,101 @@ use OutOfBoundsException;
 /**
  * Class Enumerable
  *
- * @author Roman Shamritskiy <roman@litgroup.ru>
+ * @author Roman Shamritskiy <r.shamritskiy@litgroup.ru>
  */
 abstract class Enumerable
 {
+    private const SERVICE_METHOD_NAMES = [
+        "getValueOf",
+        "getValues",
+        "cases",
+        "from",
+        "tryFrom",
+    ];
+
     /**
      * Cache of all available values of enumerables.
      *
-     * @var array
+     * @var array<class-string<Enumerable>, array<int|string, Enumerable>>
      */
-    private static $enums = [];
+    private static array $enums = [];
 
     /**
      * Marks when initialization in progress.
      *
      * @var bool
      */
-    private static $isInInitializationState = false;
+    private static bool $isInInitializationState = false;
 
     /**
-     * Current raw value  of the instance of the enumerable.
-     *
-     * @var int|string
+     * @param int|string $value The backed value of the case.
      */
-    private $rawValue;
+    final private function __construct(public readonly int|string $value) {}
 
     /**
-     * Returns an instance of Enumerable by raw value.
-     *
-     * @param int|string $rawValue
-     *
-     * @return static
+     * Initializes a enum case with the given backed value.
      */
-    final public static function getValueOf($rawValue)
+    #[\NoDiscard]
+    final protected static function case(int|string $value): static
     {
-        $values = static::getValues();
-        if (!array_key_exists($rawValue, $values)) {
+        return self::$isInInitializationState
+            ? new static($value)
+            : static::getValueOf($value);
+    }
+
+    /**
+     * Initializes a enum case with the given backed value.
+     */
+    #[\Deprecated("use case() instead", since: "0.9.0")]
+    final protected static function createEnum(int|string $value): static
+    {
+        return self::case($value);
+    }
+
+    /**
+     * Creates a enum from its backed value; results to fatal error for unknown value.
+     *
+     * Use `tryFrom()` to decode a enum from user input, it returns nullable
+     * enum value instead of throwing error.
+     */
+    final public static function from(int|string $value): ?static
+    {
+        return self::tryFrom($value) ??
+            throw new \ValueError(
+                sprintf(
+                    "%s is not a valid backing value for enum %s",
+                    (string) $value,
+                    static::class,
+                ),
+            );
+    }
+
+    /**
+     * Creates a enum from its backed value; returns null for unknown value.
+     */
+    final public static function tryFrom(int|string $value): ?static
+    {
+        if (self::isEnumNotInitialized(static::class)) {
+            self::initializeEnum(static::class);
+        }
+
+        return self::$enums[static::class][$value] ?? null;
+    }
+
+    /**
+     * Returns an instance of enum by backed value.
+     */
+    #[\Deprecated("use from() or tryFrom() instead", since: "0.9.0")]
+    final public static function getValueOf(int|string $value): static
+    {
+        return self::tryFrom($value) ??
             throw new OutOfBoundsException(
                 sprintf(
                     'Enum "%s" has no value with raw value "%s".',
                     get_called_class(),
-                    $rawValue,
+                    $value,
                 ),
             );
-        }
-
-        return $values[$rawValue];
     }
 
     /**
@@ -71,7 +120,7 @@ abstract class Enumerable
      *
      * @return array<string|int, static>
      */
-    #[\Deprecated(since: "0.9.0", message: "use cases() instead")]
+    #[\Deprecated("use cases() instead", since: "0.9.0")]
     final public static function getValues(): array
     {
         if (self::isEnumNotInitialized(static::class)) {
@@ -96,51 +145,25 @@ abstract class Enumerable
     }
 
     /**
-     * Returns the raw value of the enumerable.
-     *
-     * @return mixed
+     * Returns the backed value of the enum.
      */
-    final public function getRawValue()
+    #[\Deprecated("use ->value property instead", since: "0.9.0")]
+    final public function getRawValue(): int|string
     {
-        return $this->rawValue;
+        return $this->value;
     }
 
-    public function equals(self $enum): bool
+    public function equals(self $other): bool
     {
-        if (!$enum instanceof static) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    'Cannot compare instance of "%s" with instance of "%s"',
-                    get_class($this),
-                    get_class($enum),
-                ),
-            );
-        }
-        return $this === $enum;
+        return $this === $other;
     }
-
-    /**
-     * @param int|string $index
-     *
-     * @return static
-     */
-    final protected static function createEnum($index)
-    {
-        return self::$isInInitializationState
-            ? new static($index)
-            : static::getValueOf($index);
-    }
-
-    /*
-     * Internal methods.
-     * ********************************************************************* */
 
     /**
      * Initializes values of enumerable class.
      *
-     * @param string $enumClass
+     * @param class-string<Enumerable> $enumClass
      */
-    private static function initializeEnum($enumClass)
+    private static function initializeEnum($enumClass): void
     {
         self::$isInInitializationState = true;
         try {
@@ -219,54 +242,18 @@ abstract class Enumerable
      *
      * @return bool
      */
-    private static function isEnumNotInitialized($enumClass)
+    private static function isEnumNotInitialized($enumClass): bool
     {
         return !array_key_exists($enumClass, self::$enums);
     }
 
     /**
-     * Checks that given method is for the internal use.
-     *
-     * @param ReflectionMethod $method
-     *
-     * @return boolean
+     * Checks that given method is one of service method provided by Enumerable.
      */
-    private static function isServiceMethod(ReflectionMethod $method)
+    private static function isServiceMethod(ReflectionMethod $method): bool
     {
         return !$method->isPublic() ||
-            in_array($method->getShortName(), self::getServiceMethods());
-    }
-
-    /**
-     * @return string[]
-     */
-    private static function getServiceMethods()
-    {
-        return ["getValueOf", "getValues", "cases"];
-    }
-
-    /**
-     * @param mixed $index
-     *
-     * @return bool
-     */
-    private static function isIndexTypeAllowed($index)
-    {
-        return is_int($index) || is_string($index);
-    }
-
-    final private function __construct($index)
-    {
-        if (!self::isIndexTypeAllowed($index)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    'Index of enumerable can be a "string" or an "int", but "%s" given.',
-                    is_object($index) ? get_class($index) : gettype($index),
-                ),
-            );
-        }
-
-        $this->rawValue = $index;
+            in_array($method->getShortName(), self::SERVICE_METHOD_NAMES);
     }
 
     final public function __clone()
