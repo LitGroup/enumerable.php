@@ -58,6 +58,7 @@ abstract class Enumerable
      * Initializes a enum case with the given backed value.
      */
     #[\Deprecated("use case() instead", since: "0.9.0")]
+    #[\NoDiscard]
     final protected static function createEnum(int|string $value): static
     {
         return self::case($value);
