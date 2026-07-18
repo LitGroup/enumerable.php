@@ -186,7 +186,7 @@ abstract class Enumerable
 
             /** @var array<int|string, static> $cases */
             $cases = [];
-
+            $backedType = null;
             foreach ($staticMethods as $method) {
                 if (self::isServiceMethod($method)) {
                     continue;
@@ -204,6 +204,11 @@ abstract class Enumerable
                     );
                 }
 
+                // Check the same backed type is used for all cases:
+                $backedType = $backedType ?? gettype($instance->value);
+                if ($backedType !== gettype($instance->value)) {
+                    throw new LogicException("Backed typo of the enum may be ether int or string but not mixed.");
+                }
                 // Detect duplication of backed value:
                 if (array_key_exists($instance->value, $cases)) {
                     throw new LogicException(

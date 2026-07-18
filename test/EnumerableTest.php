@@ -20,6 +20,7 @@ use Test\LitGroup\Enumerable\Fixtures\{
     DeprecatedStringableEnum,
     EmptyEnum,
     InvalidEnumDuplicatingBackedValues,
+    InvalidMixedBackedType,
     InvalidReturnTypeEnum,
     InvalidScalarReturnTypeEnum,
     InvalidSerializableEnum,
@@ -192,6 +193,12 @@ class EnumerableTest extends TestCase
     {
         $this->expectException(\LogicException::class);
         InvalidScalarReturnTypeEnum::cases();
+    }
+
+    public function testMixedBackedTypeIsRestricted(): void
+    {
+        $this->expectException(\LogicException::class);
+        InvalidMixedBackedType::cases();
     }
 
     public function testCloningIsRestricted(): void
