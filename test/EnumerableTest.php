@@ -17,6 +17,7 @@ use Test\LitGroup\Enumerable\Fixtures\{
     AnotherColorEnum,
     ColorEnum,
     DeprecatedStringableEnum,
+    EmptyEnum,
     InvalidEnumDuplicatingBackedValues,
     InvalidReturnTypeEnum,
     InvalidScalarReturnTypeEnum,
@@ -27,6 +28,11 @@ use Test\LitGroup\Enumerable\Fixtures\{
 
 class EnumerableTest extends TestCase
 {
+    public function testEnumMayContainNoCase(): void
+    {
+        $this->assertSame([], EmptyEnum::cases());
+    }
+
     public function testReadingStringBackedValue(): void
     {
         $this->assertSame(ColorEnum::RED, ColorEnum::red()->value);
