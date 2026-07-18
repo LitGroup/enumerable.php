@@ -34,7 +34,7 @@ abstract class EnumerableTestCase extends TestCase
      *         'blue'  => ColorEnum::blue(),
      *     ]);
      */
-    public static function assertEnumHasRawValues(array $payload)
+    public static function assertEnumHasRawValues(array $payload): void
     {
         if (count($payload) === 0) {
             throw new \InvalidArgumentException('$payload should not be empty');
@@ -55,8 +55,10 @@ abstract class EnumerableTestCase extends TestCase
      * @param mixed $expected Expected raw value.
      * @param Enumerable $enum Enumerable value.
      */
-    public static function assertEnumHasRawValue($expected, Enumerable $enum)
-    {
+    public static function assertEnumHasRawValue(
+        $expected,
+        Enumerable $enum,
+    ): void {
         self::assertSame($expected, $enum->getRawValue());
     }
 
@@ -69,7 +71,7 @@ abstract class EnumerableTestCase extends TestCase
     public static function assertEnumValuesCount(
         $expectedAmountOfValues,
         $enumClass,
-    ) {
+    ): void {
         $expectedAmountOfValues = (int) $expectedAmountOfValues;
 
         if (!is_subclass_of($enumClass, Enumerable::class)) {

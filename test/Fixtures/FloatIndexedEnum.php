@@ -14,7 +14,7 @@ use LitGroup\Enumerable\Enumerable;
 
 final class FloatIndexedEnum extends Enumerable
 {
-    public static function one()
+    public static function one(): self
     {
         return self::createEnum(1.0);
     }

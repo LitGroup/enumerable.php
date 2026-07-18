@@ -18,26 +18,17 @@ final class AnotherColorEnum extends Enumerable
     const GREEN = "GREEN";
     const BLUE = "BLUE";
 
-    /**
-     * @return self
-     */
-    public static function red()
+    public static function red(): self
     {
         return self::createEnum(self::RED);
     }
 
-    /**
-     * @return self
-     */
-    public static function green()
+    public static function green(): self
     {
         return self::createEnum(self::GREEN);
     }
 
-    /**
-     * @return self
-     */
-    public static function blue()
+    public static function blue(): self
     {
         return self::createEnum(self::BLUE);
     }

@@ -16,18 +16,12 @@ final class DuplicateIndexEnum extends Enumerable
 {
     const INDEX = "some_index";
 
-    /**
-     * @return self
-     */
-    public static function some()
+    public static function some(): self
     {
         return self::createEnum(self::INDEX);
     }
 
-    /**
-     * @return self
-     */
-    public static function another()
+    public static function another(): self
     {
         return self::createEnum(self::INDEX);
     }

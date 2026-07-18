@@ -14,7 +14,7 @@ use LitGroup\Enumerable\Enumerable;
 
 final class InvalidScalarReturnTypeEnum extends Enumerable
 {
-    public static function someValue()
+    public static function someValue(): string
     {
         return "not an object";
     }

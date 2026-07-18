@@ -16,10 +16,8 @@ final class InvalidReturnTypeEnum extends Enumerable
 {
     /**
      * Returns an instance of another enumerable class.
-     *
-     * @return self
      */
-    public static function someValue()
+    public static function someValue(): Enumerable
     {
         return ColorEnum::red();
     }
