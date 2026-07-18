@@ -41,7 +41,7 @@ abstract class Enumerable
     /**
      * @param int|string $value The backed value of the case.
      */
-    final private function __construct(public readonly int|string $value) {}
+    final private function __construct(public final readonly int|string $value) {}
 
     /**
      * Initializes a enum case with the given backed value.
