@@ -92,9 +92,7 @@ abstract class Enumerable
      */
     final public static function tryFrom(int|string $value): ?static
     {
-        if (self::isEnumNotInitialized(static::class)) {
-            self::initializeEnum(static::class);
-        }
+        self::initializeIfNotYet();
 
         return self::$enums[static::class][$value] ?? null;
     }
@@ -123,9 +121,7 @@ abstract class Enumerable
     #[\Deprecated("use cases() instead", since: "0.9.0")]
     final public static function getValues(): array
     {
-        if (self::isEnumNotInitialized(static::class)) {
-            self::initializeEnum(static::class);
-        }
+        self::initializeIfNotYet();
 
         return self::$enums[static::class];
     }
@@ -137,9 +133,7 @@ abstract class Enumerable
      */
     final public static function cases(): array
     {
-        if (self::isEnumNotInitialized(static::class)) {
-            self::initializeEnum(static::class);
-        }
+        self::initializeIfNotYet();
 
         return array_values(self::$enums[static::class]);
     }
@@ -156,6 +150,13 @@ abstract class Enumerable
     public function equals(self $other): bool
     {
         return $this === $other;
+    }
+
+    private static function initializeIfNotYet(): void
+    {
+        if (self::isEnumNotInitialized(static::class)) {
+            self::initializeEnum(static::class);
+        }
     }
 
     /**
